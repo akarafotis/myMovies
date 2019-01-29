@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package gr.eap.mymovies.view;
 
 /**
  *
@@ -136,9 +136,9 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
 //        });
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.util.List<model.FavoriteList> favoriteListList;
-    private java.util.List<model.FavoriteList> favoriteListList1;
-    private java.util.List<model.FavoriteList> favoriteListList2;
+    private java.util.List<gr.eap.mymovies.model.FavoriteList> favoriteListList;
+    private java.util.List<gr.eap.mymovies.model.FavoriteList> favoriteListList1;
+    private java.util.List<gr.eap.mymovies.model.FavoriteList> favoriteListList2;
     private javax.persistence.Query favoriteListQuery;
     private javax.persistence.Query favoriteListQuery1;
     private javax.persistence.Query favoriteListQuery2;
@@ -146,11 +146,11 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private java.util.List<model.Movie> movieList;
-    private java.util.List<model.Movie> movieList1;
-    private java.util.List<model.Movie> movieList2;
-    private java.util.List<model.Movie> movieList3;
-    private java.util.List<model.Movie> movieList4;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList1;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList2;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList3;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList4;
     private javax.persistence.Query movieQuery;
     private javax.persistence.Query movieQuery1;
     private javax.persistence.Query movieQuery2;

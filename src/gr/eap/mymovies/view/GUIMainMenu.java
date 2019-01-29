@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package gr.eap.mymovies.view;
 
+import gr.eap.mymovies.controller.AppController;
 import java.awt.Toolkit;
 
 /**
@@ -13,6 +14,8 @@ import java.awt.Toolkit;
  */
 public class GUIMainMenu extends javax.swing.JFrame {
 
+    private AppController appController;
+    
     /**
      * Creates new form GUIMainMenu
      */
@@ -20,6 +23,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
         initComponents();
         // Κεντράρισμα του παραθύρου εφαρμογής στην οθόνη του υπολογιστή
         this.setLocationRelativeTo(null);
+        
+        // Init Application Controller
+        appController = new AppController();
     }
 
     /**
@@ -54,7 +60,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1050, 99));
 
-        retrieveAndStoreMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/restore.png"))); // NOI18N
+        retrieveAndStoreMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/restore.png"))); // NOI18N
         retrieveAndStoreMovies.setText("<html><center>Ανάκτηση &<br/>Αποθήκευση<br/>Δεδομένων Ταινιών</center></html>");
         retrieveAndStoreMovies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -62,7 +68,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         });
 
-        manageFavoriteLists.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/manageLists.png"))); // NOI18N
+        manageFavoriteLists.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/manageLists.png"))); // NOI18N
         manageFavoriteLists.setText("<html><center>Διαχείριση Λιστών <br/>Αγαπημένων Ταινιών</center></html>");
         manageFavoriteLists.setToolTipText("");
         manageFavoriteLists.addActionListener(new java.awt.event.ActionListener() {
@@ -71,13 +77,13 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         });
 
-        searchMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/searchMovie.png"))); // NOI18N
+        searchMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/searchMovie.png"))); // NOI18N
         searchMovies.setText("<html><center>Αναζήτηση<br/>Ταινιών</center></html>");
 
-        statistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/statMovies.png"))); // NOI18N
+        statistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/statMovies.png"))); // NOI18N
         statistics.setText("Στατιστικά");
 
-        exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/exit.png"))); // NOI18N
+        exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/exit.png"))); // NOI18N
         exit.setText("Έξοδος");
         exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,7 +167,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
-        // TODO add your handling code here:
+        appController.retrieveAndPersistMovies();
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed
 
     private void manageFavoriteListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsActionPerformed
@@ -169,7 +175,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_manageFavoriteListsActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-        // TODO add your handling code here:
+        System.out.println("exiting myMovies application");
+        System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
     /**

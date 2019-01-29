@@ -22,7 +22,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.Movie&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.Movie&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="favoriteListQuery">
@@ -40,7 +40,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.FavoriteList&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.FavoriteList&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="favoriteListQuery1">
@@ -58,7 +58,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.FavoriteList&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.FavoriteList&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="movieQuery1">
@@ -76,7 +76,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.Movie&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.Movie&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="movieQuery2">
@@ -94,7 +94,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.Movie&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.Movie&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="movieQuery3">
@@ -112,7 +112,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.Movie&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.Movie&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="movieQuery4">
@@ -130,7 +130,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.Movie&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.Movie&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.persistence.Query" name="favoriteListQuery2">
@@ -148,7 +148,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;model.FavoriteList&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;gr.eap.mymovies.model.FavoriteList&gt;"/>
       </AuxValues>
     </Component>
   </NonVisualComponents>
