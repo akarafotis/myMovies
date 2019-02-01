@@ -6,16 +6,20 @@
 package gr.eap.mymovies.view;
 
 import gr.eap.mymovies.controller.AppController;
+import gr.eap.mymovies.controller.ControllerMovie;
+import gr.eap.mymovies.controller.ControllerGenre;
 import java.awt.Toolkit;
 
 /**
  *
- * @author g_kak
+ * @author akarafotis
  */
 public class GUIMainMenu extends javax.swing.JFrame {
 
     private AppController appController;
-    
+    private ControllerMovie controllerMovie;
+    private ControllerGenre controllerGenre;
+
     /**
      * Creates new form GUIMainMenu
      */
@@ -23,9 +27,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
         initComponents();
         // Κεντράρισμα του παραθύρου εφαρμογής στην οθόνη του υπολογιστή
         this.setLocationRelativeTo(null);
-        
+
         // Init Application Controller
-        appController = new AppController();
+        controllerMovie = new ControllerMovie();
+        controllerGenre = new ControllerGenre();
     }
 
     /**
@@ -57,6 +62,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         setTitle("myMovies");
         setIconImage(Toolkit.getDefaultToolkit().getImage(GUIMainMenu.class.getResource("movies.png")));
         setPreferredSize(new java.awt.Dimension(1050, 389));
+        getContentPane().setLayout(null);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1050, 99));
 
@@ -79,6 +85,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         searchMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/searchMovie.png"))); // NOI18N
         searchMovies.setText("<html><center>Αναζήτηση<br/>Ταινιών</center></html>");
+        searchMovies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                persistGenres(evt);
+            }
+        });
 
         statistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/statMovies.png"))); // NOI18N
         statistics.setText("Στατιστικά");
@@ -119,6 +130,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 .addGap(7, 7, 7))
         );
 
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 1024, 99);
+        jPanel1.getAccessibleContext().setAccessibleName("ButtonPanel");
+
         jMenu1.setText("Ταινίες");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
@@ -148,26 +163,12 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(600, Short.MAX_VALUE))
-        );
-
-        jPanel1.getAccessibleContext().setAccessibleName("ButtonPanel");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
-        appController.retrieveAndPersistMovies();
+        controllerGenre.insertDataFromJson();
+        controllerMovie.retrieveAndPersistMovies();
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed
 
     private void manageFavoriteListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsActionPerformed
@@ -178,6 +179,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
         System.out.println("exiting myMovies application");
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
+
+    private void persistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_persistGenres
+        //controllerGenre.insertDataFromJson();
+    }//GEN-LAST:event_persistGenres
 
     /**
      * @param args the command line arguments

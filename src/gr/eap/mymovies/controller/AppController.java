@@ -1,59 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gr.eap.mymovies.controller;
 
-import gr.eap.mymovies.model.Genre;
-import gr.eap.mymovies.model.Movie;
+/*γενική κλάση διαχείρησης των entities*/
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import gr.eap.mymovies.service.DBService;
-import gr.eap.mymovies.service.TMBDService;
-import gr.eap.mymovies.util.MoviesHelper;
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
- * @author pkarafotis
+ * @author akarafotis
  */
-public class AppController {
-    
-    private TMBDService tmdbService;
-    
+public abstract class AppController {
+
+    //χρησιμοποιούμε static για να έχουμε τον ίδιο entity manager καθ' όλη τη διάρκεια της εκτέλεσης
+    protected static EntityManager em;
+
+//    private TMBDService tmdbService;
     private DBService dbService;
-    
-    private MoviesHelper moviesHelper;
-    
+//    private MoviesHelper moviesHelper;
+
     public AppController() {
-        // Initializing services
-        tmdbService = new TMBDService();
-        dbService = new DBService();
-        moviesHelper = new MoviesHelper();
+        if (em == null) {
+            /*Σύνδεση με τη βάση, δημιουργία entity factory και entity manager*/
+            dbService.connect();
+            em = dbService.getEm();
+        }
     }
-    
-    public void retrieveAndPersistMovies() {
-        
-        String a = "{0} and {1}";
-        
-        MessageFormat.format(a, "r","t");
-        
-        return;
-//        System.out.println("Calling TMDB to retrieve data...");
-//        List<Genre> genres =  tmdbService.getGenres();
-//        
-//        // Filter out unwanted genres
-//        genres = moviesHelper.filteroutGenres(genres);
-//
-//        Map<Genre, List<Movie>> movies = tmdbService.getMoviesPerGenre(genres);
-//        
-//        System.out.println("Persisting data to local DB...");
-//        
-//        // Persist Genres
-//        dbService.persistGenres(genres);
-//        
-//        // Persist Movies
-//        dbService.persistMovies(movies);
+
+    //μέθοδος διαγραφής πίνακα μέσω ενός έτοιμου namedQuery.
+    protected void clearTbl(String namedQuery) {
+        try {
+            em.getTransaction().begin();
+            Query query1 = em.createNamedQuery(namedQuery);
+            query1.executeUpdate();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
     }
+
+    protected abstract void clearTable();
 }
