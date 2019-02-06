@@ -5,11 +5,9 @@ import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
 import gr.eap.mymovies.util.MoviesHelper;
-import java.util.ArrayList;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 
 /**
  *
@@ -37,7 +35,7 @@ public class ControllerMovie extends AppController {
 //        MessageFormat.format(a, "r","t");
 //
 //        return;
-        System.out.println("Calling TMDB to retrieve data...");
+//        System.out.println("Calling TMDB to retrieve data...");
         List<Genre> genres = tmdbService.getGenres();
         //System.out.println(genres);
 
@@ -63,7 +61,7 @@ public class ControllerMovie extends AppController {
         dbService.persistMovies(movies);
     }
 
-    /*Εύρεση πόλης με το αντίστοιχο Id*/
+    /*Εύρεση ταινίας με το αντίστοιχο Id*/
     public Movie findMovieById(int movieId) {
         return em.find(Movie.class, movieId);
     }

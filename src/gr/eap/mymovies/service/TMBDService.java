@@ -30,7 +30,7 @@ public class TMBDService {
     public static final String API_KEY = "1411ebbb56b1c62961d6bf46cd8c6860";
     public static final String BASE_URI = "https://api.themoviedb.org/3/";
     public static final String GENRES_URI = BASE_URI + "genre/movie/list?api_key=" + API_KEY;
-    public static final String MOVIES_PER_GENRE_URI = BASE_URI + "discover/movie?&with_genres=28&release_date.gte=2000&api_key=" + API_KEY;
+    public static final String MOVIES_PER_GENRE_URI = BASE_URI + "discover/movie?&with_genres=28&release_date.gte=2000&api_key=" + API_KEY + "&page=";
     //public static final String MOVIES_PER_GENRE_URI = BASE_URI + "discover/movie?page={0}&with_genres={1}&release_date.gte=2000&api_key=" + API_KEY;
 
     private final CloseableHttpClient httpClient;
@@ -75,7 +75,7 @@ public class TMBDService {
             }
 
             List<Genre> filteredGenres = genres.stream().filter(p -> p.getId() == 18 || p.getId() == 10749 || p.getId() == 878).collect(Collectors.toList());
-            getMoviesPerGenre(filteredGenres);
+            //getMoviesPerGenre(filteredGenres);
 
         } catch (Exception e) {
             System.out.println("An error occured while fetching genres: " + e);
@@ -91,50 +91,52 @@ public class TMBDService {
         Map<Genre, List<Movie>> moviesPerGenre = new HashMap<Genre, List<Movie>>();
         ArrayList<Movie> movies = new ArrayList<Movie>();
 
-        HttpGet request = new HttpGet(MOVIES_PER_GENRE_URI);
-        CloseableHttpResponse response = null;
-        JsonObject jsonObject = new JsonObject();
+        for (int p = 5; p < 7; p++) {
 
-        try {
-            response = httpClient.execute(request);
-            System.out.println(response);
+            HttpGet request = new HttpGet(MOVIES_PER_GENRE_URI + String.valueOf(p));
+            CloseableHttpResponse response = null;
+            JsonObject jsonObject = new JsonObject();
 
-            InputStream content = response.getEntity().getContent();
-            JsonParser parser = new JsonParser();
+            try {
+                response = httpClient.execute(request);
+                System.out.println(response);
 
-            Reader reader = new InputStreamReader(content, "UTF-8");
+                InputStream content = response.getEntity().getContent();
+                JsonParser parser = new JsonParser();
 
-            JsonElement jsonElement = parser.parse(reader);
-            jsonObject = jsonElement.getAsJsonObject();
+                Reader reader = new InputStreamReader(content, "UTF-8");
 
-            JsonObject jsonObjectListItem;
+                JsonElement jsonElement = parser.parse(reader);
+                jsonObject = jsonElement.getAsJsonObject();
 
-            int cnt = jsonObject.getAsJsonArray("results").size();
-            for (int i = 0; i < cnt; i++) {
-                Movie movie = new Movie();
-                jsonObjectListItem = jsonObject.getAsJsonArray("results").get(i).getAsJsonObject();
+                JsonObject jsonObjectListItem;
+
+                int cnt = jsonObject.getAsJsonArray("results").size();
+                for (int i = 0; i < cnt; i++) {
+                    Movie movie = new Movie();
+                    jsonObjectListItem = jsonObject.getAsJsonArray("results").get(i).getAsJsonObject();
 //                ArrayList<Integer> genreIds = new ArrayList<Integer>();
 //                int cnt2 = jsonObjectListItem.getAsJsonArray("genre_ids").size();
 //                for (int j = 0; j < cnt2; j++) {}
-                movie.setGenreId(g);
-                movie.setId(jsonObjectListItem.get("id").getAsInt());
-                movie.setOverview(jsonObjectListItem.get("overview").getAsString());
-                movie.setRating(jsonObjectListItem.get("vote_average").getAsDouble());
+                    movie.setGenreId(g);
+                    movie.setId(jsonObjectListItem.get("id").getAsInt());
+                    //movie.setOverview(jsonObjectListItem.get("overview").getAsString());
+                    movie.setRating(jsonObjectListItem.get("vote_average").getAsDouble());
 
-                String releaseDate = jsonObjectListItem.get("release_date").getAsString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date convertedDate = sdf.parse(releaseDate);
-                movie.setReleaseDate(convertedDate);
+                    String releaseDate = jsonObjectListItem.get("release_date").getAsString();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date convertedDate = sdf.parse(releaseDate);
+                    movie.setReleaseDate(convertedDate);
 
-                movie.setTitle(jsonObjectListItem.get("title").getAsString());
+                    movie.setTitle(jsonObjectListItem.get("title").getAsString());
 
-                movies.add(movie);
+                    movies.add(movie);
+                }
+                moviesPerGenre.put(g, movies);
+            } catch (Exception e) {
+                System.out.println("An error occured while fetching genres: " + e);
             }
-            moviesPerGenre.put(g, movies);
-        } catch (Exception e) {
-            System.out.println("An error occured while fetching genres: " + e);
         }
-
         return moviesPerGenre;//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

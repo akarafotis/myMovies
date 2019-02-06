@@ -46,15 +46,20 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
         movieList4 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : movieQuery4.getResultList();
         favoriteListQuery2 = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT f FROM FavoriteList f");
         favoriteListList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : favoriteListQuery2.getResultList();
+        movieQuery5 = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT m FROM Movie m");
+        movieList5 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : movieQuery5.getResultList();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        searchMovies = new javax.swing.JButton();
+        searchMovies1 = new javax.swing.JButton();
+        searchMovies2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1050, 389));
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, movieList4, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, movieList5, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${title}"));
         columnBinding.setColumnName("Title");
         columnBinding.setColumnClass(String.class);
@@ -64,17 +69,43 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${overview}"));
         columnBinding.setColumnName("Overview");
         columnBinding.setColumnClass(String.class);
-        jTableBinding.setSourceUnreadableValue(movieList);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
 
         jScrollPane2.setViewportView(jTable1);
 
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, favoriteListList2, jList1);
+        jList1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jList1.setToolTipText("favoriteList");
+
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, favoriteListList, jList1);
         jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         bindingGroup.addBinding(jListBinding);
 
         jScrollPane1.setViewportView(jList1);
+
+        searchMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/new.png"))); // NOI18N
+        searchMovies.setText("<html><center>Δημιουργία<br/>Λίστας</center></html>");
+        searchMovies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMoviespersistGenres(evt);
+            }
+        });
+
+        searchMovies1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/delete.png"))); // NOI18N
+        searchMovies1.setText("<html><center>Διαγραφή<br/>Λίστας</center></html>");
+        searchMovies1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMovies1persistGenres(evt);
+            }
+        });
+
+        searchMovies2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/edit.png"))); // NOI18N
+        searchMovies2.setText("<html><center>Επεξεργασία<br/>Λίστας</center></html>");
+        searchMovies2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMovies2persistGenres(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,24 +113,49 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(358, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(searchMovies1)
+                    .addComponent(searchMovies2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(searchMovies))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(331, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(searchMovies, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(searchMovies2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(searchMovies1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void searchMoviespersistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMoviespersistGenres
+        //controllerGenre.insertDataFromJson();
+    }//GEN-LAST:event_searchMoviespersistGenres
+
+    private void searchMovies1persistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMovies1persistGenres
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchMovies1persistGenres
+
+    private void searchMovies2persistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMovies2persistGenres
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchMovies2persistGenres
 
     /**
      * @param args the command line arguments
@@ -151,12 +207,17 @@ public class GUIManageFavotiteLists extends javax.swing.JFrame {
     private java.util.List<gr.eap.mymovies.model.Movie> movieList2;
     private java.util.List<gr.eap.mymovies.model.Movie> movieList3;
     private java.util.List<gr.eap.mymovies.model.Movie> movieList4;
+    private java.util.List<gr.eap.mymovies.model.Movie> movieList5;
     private javax.persistence.Query movieQuery;
     private javax.persistence.Query movieQuery1;
     private javax.persistence.Query movieQuery2;
     private javax.persistence.Query movieQuery3;
     private javax.persistence.Query movieQuery4;
+    private javax.persistence.Query movieQuery5;
     private javax.persistence.EntityManager myMoviesPUEntityManager;
+    private javax.swing.JButton searchMovies;
+    private javax.swing.JButton searchMovies1;
+    private javax.swing.JButton searchMovies2;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

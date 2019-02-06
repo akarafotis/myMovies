@@ -9,6 +9,7 @@ import gr.eap.mymovies.controller.AppController;
 import gr.eap.mymovies.controller.ControllerMovie;
 import gr.eap.mymovies.controller.ControllerGenre;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -93,6 +94,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         statistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/statMovies.png"))); // NOI18N
         statistics.setText("Στατιστικά");
+        statistics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteData(evt);
+            }
+        });
 
         exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/exit.png"))); // NOI18N
         exit.setText("Έξοδος");
@@ -167,8 +173,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
+        controllerMovie.clearTable();
+        controllerGenre.clearTable();
         controllerGenre.insertDataFromJson();
         controllerMovie.retrieveAndPersistMovies();
+        JOptionPane.showMessageDialog(this, "Η ανάκτηση των δεδομένων ολοκληρώθηκε");
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed
 
     private void manageFavoriteListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsActionPerformed
@@ -183,6 +192,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void persistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_persistGenres
         //controllerGenre.insertDataFromJson();
     }//GEN-LAST:event_persistGenres
+
+    private void deleteData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteData
+        controllerMovie.clearTable();
+        controllerGenre.clearTable();
+    }//GEN-LAST:event_deleteData
 
     /**
      * @param args the command line arguments
@@ -218,7 +232,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exit;
     private javax.swing.JMenu jMenu1;

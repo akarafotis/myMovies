@@ -16,14 +16,13 @@ public abstract class AppController {
     protected static EntityManager em;
 
 //    private TMBDService tmdbService;
-    private DBService dbService;
+//    private DBService dbService;
 //    private MoviesHelper moviesHelper;
-
     public AppController() {
         if (em == null) {
             /*Σύνδεση με τη βάση, δημιουργία entity factory και entity manager*/
-            dbService.connect();
-            em = dbService.getEm();
+            DBService.connect();
+            em = DBService.getEm();
         }
     }
 
