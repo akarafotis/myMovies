@@ -1,13 +1,16 @@
 package gr.eap.mymovies.controller;
 
+import static gr.eap.mymovies.controller.AppController.em;
 import gr.eap.mymovies.model.Genre;
 import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
+import gr.eap.mymovies.service.TestClass;
 import gr.eap.mymovies.util.MoviesHelper;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -30,19 +33,24 @@ public class ControllerMovie extends AppController {
 
     public void retrieveAndPersistMovies() {
 
-//        String a = "{0} and {1}";
-//
-//        MessageFormat.format(a, "r","t");
-//
-//        return;
-//        System.out.println("Calling TMDB to retrieve data...");
+        em.getTransaction().begin();
+
         List<Genre> genres = tmdbService.getGenres();
-        //System.out.println(genres);
+        List<Genre> filteredGenres = genres.stream().filter(p -> p.getId() == 28 || p.getId() == 10749 || p.getId() == 878).collect(Collectors.toList());
 
-        // Filter out unwanted genres
-        genres = moviesHelper.filteroutGenres(genres);
+        for (Genre genre : filteredGenres) {
+            em.persist(genre);
+        }
+        em.getTransaction().commit();
 
-        Map<Genre, List<Movie>> movies = tmdbService.getMoviesPerGenre(genres);
+        // tmdbService.getMoviesPerGenre();
+        try {
+            TestClass.getMoviesPerGenreNew();
+        } catch (Exception e) {
+        }
+
+        /*
+        Map<Genre, List<Movie>> movies = tmdbService.getMoviesPerGenre(filteredGenres);
 
         System.out.println("Persisting data to local DB...");
 
@@ -53,12 +61,11 @@ public class ControllerMovie extends AppController {
             }
         }
         em.getTransaction().commit();
-
+         */
         // Persist Genres
-        dbService.persistGenres(genres);
-
+        //dbService.persistGenres(genres);
         // Persist Movies
-        dbService.persistMovies(movies);
+        //dbService.persistMovies(movies);
     }
 
     /*Εύρεση ταινίας με το αντίστοιχο Id*/

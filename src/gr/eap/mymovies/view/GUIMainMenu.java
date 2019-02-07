@@ -62,7 +62,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("myMovies");
         setIconImage(Toolkit.getDefaultToolkit().getImage(GUIMainMenu.class.getResource("movies.png")));
-        setPreferredSize(new java.awt.Dimension(1050, 389));
+        setPreferredSize(new java.awt.Dimension(1050, 700));
         getContentPane().setLayout(null);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1050, 99));
@@ -175,7 +175,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
         controllerMovie.clearTable();
         controllerGenre.clearTable();
-        controllerGenre.insertDataFromJson();
+        //controllerGenre.insertDataFromJson();
         controllerMovie.retrieveAndPersistMovies();
         JOptionPane.showMessageDialog(this, "Η ανάκτηση των δεδομένων ολοκληρώθηκε");
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed

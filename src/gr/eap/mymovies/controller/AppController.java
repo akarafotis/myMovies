@@ -24,12 +24,6 @@ public abstract class AppController {
             DBService.connect();
             em = DBService.getEm();
         }
-
-        if (em != null) {
-            /*Σύνδεση με τη βάση, δημιουργία entity factory και entity manager*/
-            DBService.connect();
-            em = DBService.getEm();
-        }
     }
 
     //μέθοδος διαγραφής πίνακα μέσω ενός έτοιμου namedQuery.

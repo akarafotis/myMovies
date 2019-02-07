@@ -65,7 +65,7 @@
       <Connection code="Toolkit.getDefaultToolkit().getImage(GUIMainMenu.class.getResource(&quot;movies.png&quot;))" type="code"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1050, 389]"/>
+      <Dimension value="[1050, 700]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
