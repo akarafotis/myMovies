@@ -4,6 +4,7 @@ import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
 import gr.eap.mymovies.util.MoviesHelper;
 import gr.eap.mymovies.model.Genre;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.Query;
@@ -33,15 +34,13 @@ public class ControllerGenre extends AppController {
     }
 
     // Εισαγωγή δεδομένων από JSON στον πίνακα Genres
-    public void insertDataFromJson() {
+    public void retrieveAndPersistGenres() throws IOException {
 
         em.getTransaction().begin();
-
         List<Genre> genres = tmdbService.getGenres();
-        List<Genre> filteredGenres = genres.stream().filter(p -> p.getId() == 28 || p.getId() == 10749 || p.getId() == 878).collect(Collectors.toList());
-
-        for (Genre genre : filteredGenres) {
+        for (Genre genre : genres) {
             em.persist(genre);
+            System.out.println("Inserted Genre: " + genre.getId());
         }
         em.getTransaction().commit();
     }

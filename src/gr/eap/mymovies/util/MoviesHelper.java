@@ -16,14 +16,13 @@ import java.util.stream.Collectors;
  */
 public class MoviesHelper {
 
-    public List<Genre> filteroutGenres(List<Genre> genres) {
-
-        TMBDService tmdb_s = new TMBDService();
-        genres = tmdb_s.getGenres();
-
-        List<Genre> filteredGenres = genres.stream().filter(p -> p.getId() == 28 || p.getId() == 10749 || p.getId() == 878).collect(Collectors.toList());
-
-        return filteredGenres;
-    }
-
+//    public List<Genre> filteroutGenres(List<Genre> genres) {
+//
+//        TMBDService tmdb_s = new TMBDService();
+//        genres = tmdb_s.getGenres();
+//
+//        List<Genre> filteredGenres = genres.stream().filter(p -> p.getId() == 28 || p.getId() == 10749 || p.getId() == 878).collect(Collectors.toList());
+//
+//        return filteredGenres;
+//    }
 }

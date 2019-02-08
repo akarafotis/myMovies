@@ -9,6 +9,10 @@ import gr.eap.mymovies.controller.AppController;
 import gr.eap.mymovies.controller.ControllerMovie;
 import gr.eap.mymovies.controller.ControllerGenre;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -175,9 +179,17 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
         controllerMovie.clearTable();
         controllerGenre.clearTable();
-        //controllerGenre.insertDataFromJson();
-        controllerMovie.retrieveAndPersistMovies();
-        JOptionPane.showMessageDialog(this, "Η ανάκτηση των δεδομένων ολοκληρώθηκε");
+        try {
+            controllerGenre.retrieveAndPersistGenres();
+            controllerMovie.retrieveAndPersistMovies();
+            JOptionPane.showMessageDialog(this, "Η ανάκτηση των δεδομένων ολοκληρώθηκε");
+        } catch (IOException ex) {
+            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Κατι δεν πήγε καλά");
+        } catch (ParseException ex) {
+            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Κατι δεν πήγε καλά");
+        }
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed
 
     private void manageFavoriteListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsActionPerformed
