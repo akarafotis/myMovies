@@ -5,6 +5,8 @@
  */
 package gr.eap.mymovies.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -15,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,6 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     // added deleteAll namedQuery
     , @NamedQuery(name = "Genre.deleteAll", query = "DELETE FROM Genre")})
 public class Genre implements Serializable {
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,7 +61,9 @@ public class Genre implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getName() {
@@ -63,7 +71,9 @@ public class Genre implements Serializable {
     }
 
     public void setName(String name) {
+        String oldName = this.name;
         this.name = name;
+        changeSupport.firePropertyChange("name", oldName, name);
     }
 
     @XmlTransient
@@ -98,6 +108,14 @@ public class Genre implements Serializable {
     @Override
     public String toString() {
         return "myMoviesPackage.Genre[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 
 }

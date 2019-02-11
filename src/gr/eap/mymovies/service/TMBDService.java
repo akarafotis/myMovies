@@ -55,6 +55,8 @@ public class TMBDService {
     public ArrayList<Movie> getMoviesPerGenre() throws IOException, ParseException {
 
         ArrayList<Movie> movies = new ArrayList<>();
+        ArrayList<Integer> keys = new ArrayList<>();
+        ArrayList<Integer> d_keys = new ArrayList<>();
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("myMoviesPU");
         EntityManager em = emf.createEntityManager();

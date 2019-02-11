@@ -1,18 +1,13 @@
 package gr.eap.mymovies.controller;
 
 import static gr.eap.mymovies.controller.AppController.em;
-import gr.eap.mymovies.model.Genre;
 import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
 import gr.eap.mymovies.util.MoviesHelper;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -38,9 +33,24 @@ public class ControllerMovie extends AppController {
         em.getTransaction().begin();
 
         ArrayList<Movie> movies = tmdbService.getMoviesPerGenre();
-        for (Movie movie : movies) {
-            em.persist(movie);
+
+        ArrayList<Integer> keys = new ArrayList<>();
+
+        em.persist(movies.get(0));
+        keys.add(0, movies.get(0).getId());
+
+        for (int i = 1; i < movies.size(); i++) {
+            if (!keys.contains(movies.get(i).getId())) {
+                keys.add(i, movies.get(i).getId());
+                em.persist(movies.get(i));
+            } else {
+                keys.add(i, -800 + i);
+            }
+
         }
+//        for (Movie movie : movies) {
+//            em.persist(movie);
+//        }
         em.getTransaction().commit();
     }
 
