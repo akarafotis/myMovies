@@ -37,8 +37,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Movie.findByReleaseDate", query = "SELECT m FROM Movie m WHERE m.releaseDate = :releaseDate")
     , @NamedQuery(name = "Movie.findByRating", query = "SELECT m FROM Movie m WHERE m.rating = :rating")
     , @NamedQuery(name = "Movie.findByOverview", query = "SELECT m FROM Movie m WHERE m.overview = :overview")
-    // added deleteAll namedQuery
-    , @NamedQuery(name = "Movie.deleteAll", query = "DELETE FROM Movie")})
+    // added namedQueries
+    , @NamedQuery(name = "Movie.deleteAll", query = "DELETE FROM Movie")
+    , @NamedQuery(name = "Movie.findByYear", query = "SELECT m FROM Movie m JOIN m.genreId g "
+            + "WHERE g.name = :genre and FUNC ('YEAR', m.releaseDate) = :releaseDate")
+    , @NamedQuery(name = "Movie.findTop10", query = "SELECT m FROM Movie m ORDER BY m.rating DESC")
+    , @NamedQuery(name = "Movie.findByFavoriteList", query = "SELECT m FROM Movie m WHERE m.favoriteListId = :favoriteListId ORDER BY m.rating DESC")
+})
+
 public class Movie implements Serializable {
 
     @Transient

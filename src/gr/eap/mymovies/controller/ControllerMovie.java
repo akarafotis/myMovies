@@ -1,6 +1,7 @@
 package gr.eap.mymovies.controller;
 
 import static gr.eap.mymovies.controller.AppController.em;
+import gr.eap.mymovies.model.FavoriteList;
 import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
@@ -8,6 +9,9 @@ import gr.eap.mymovies.util.MoviesHelper;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import javax.persistence.Query;
 
 /**
  *
@@ -48,10 +52,39 @@ public class ControllerMovie extends AppController {
             }
 
         }
-//        for (Movie movie : movies) {
-//            em.persist(movie);
-//        }
         em.getTransaction().commit();
+    }
+
+    public void updateMovie(Movie movie, FavoriteList fl) throws IOException, ParseException {
+
+        Movie m = em.find(Movie.class, movie.getId());
+        em.getTransaction().begin();
+        movie.setFavoriteListId(fl);
+        em.getTransaction().commit();
+    }
+
+    public List<Movie> searchMovies(String genre, String year) {
+        Query q = em.createNamedQuery("Movie.findByYear");
+        q.setParameter("genre", genre);
+        q.setParameter("releaseDate", Integer.parseInt(year));
+        return q.getResultList();
+    }
+
+    public List<Movie> selectMovie(String title) {
+        Query q = em.createNamedQuery("Movie.findByTitle");
+        q.setParameter("title", title);
+        return q.getResultList();
+    }
+
+    public List<Movie> selectMovieByFavoriteList(FavoriteList favoriteList) {
+        Query q = em.createNamedQuery("Movie.findByFavoriteList");
+        q.setParameter("favoriteListId", favoriteList);
+        return q.getResultList();
+    }
+
+    public List<Movie> findTop10Movies() {
+        Query q = em.createNamedQuery("Movie.findTop10").setMaxResults(10);
+        return q.getResultList();
     }
 
     /*Εύρεση ταινίας με το αντίστοιχο Id*/

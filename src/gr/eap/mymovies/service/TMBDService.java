@@ -60,7 +60,7 @@ public class TMBDService {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("myMoviesPU");
         EntityManager em = emf.createEntityManager();
-
+        int x = 0;
         for (int i = 1; i < 40; i++) {
             URL url = new URL(MOVIES_URI + String.valueOf(i));
             JsonReader reader = Json.createReader(new InputStreamReader(url.openStream()));
@@ -79,8 +79,8 @@ public class TMBDService {
                 }
                 if (genreIdsPerMovie.contains(28)) {
                     movieGenre = 28;
-                } else if (genreIdsPerMovie.contains(10794)) {
-                    movieGenre = 10794;
+                } else if (genreIdsPerMovie.contains(10749)) {
+                    movieGenre = 10749;
                 } else {
                     movieGenre = 878;
                 }
@@ -97,8 +97,10 @@ public class TMBDService {
                 movie.setReleaseDate(convertedDate);
 
                 movie.setTitle(temp.get("title").toString());
+                x++;
                 movies.add(movie);
                 System.out.println("Added Movie: " + movie.getId());
+                System.out.println("Proggress:" + x + "/780");
             }
         }
         return movies;
