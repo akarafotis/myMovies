@@ -15,9 +15,6 @@ public abstract class AppController {
     //χρησιμοποιούμε static για να έχουμε τον ίδιο entity manager καθ' όλη τη διάρκεια της εκτέλεσης
     protected static EntityManager em;
 
-//    private TMBDService tmdbService;
-//    private DBService dbService;
-//    private MoviesHelper moviesHelper;
     public AppController() {
         if (em == null) {
             /*Σύνδεση με τη βάση, δημιουργία entity factory και entity manager*/

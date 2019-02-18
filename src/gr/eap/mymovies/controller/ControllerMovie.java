@@ -35,11 +35,8 @@ public class ControllerMovie extends AppController {
     public void retrieveAndPersistMovies() throws IOException, ParseException {
 
         em.getTransaction().begin();
-
         ArrayList<Movie> movies = tmdbService.getMoviesPerGenre();
-
         ArrayList<Integer> keys = new ArrayList<>();
-
         em.persist(movies.get(0));
         keys.add(0, movies.get(0).getId());
 
@@ -50,7 +47,6 @@ public class ControllerMovie extends AppController {
             } else {
                 keys.add(i, -800 + i);
             }
-
         }
         em.getTransaction().commit();
     }
