@@ -42,4 +42,9 @@ public class ControllerGenre extends AppController {
         em.getTransaction().commit();
     }
 
+    public List<Genre> findAll() {
+        Query q = em.createNamedQuery("Genre.findAll");
+        return q.getResultList();
+    }
+
 }
