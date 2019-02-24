@@ -2,7 +2,6 @@ package gr.eap.mymovies.controller;
 
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
-import gr.eap.mymovies.util.MoviesHelper;
 import gr.eap.mymovies.model.Genre;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +16,6 @@ public class ControllerGenre extends AppController {
 
     private final DBService dbService;
     private final TMBDService tmdbService;
-    private final MoviesHelper moviesHelper;
 
     public ControllerGenre() {
         super();
@@ -25,7 +23,6 @@ public class ControllerGenre extends AppController {
         // Initializing services
         tmdbService = new TMBDService();
         dbService = new DBService();
-        moviesHelper = new MoviesHelper();
     }
 
     @Override

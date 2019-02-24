@@ -5,7 +5,6 @@ import gr.eap.mymovies.model.FavoriteList;
 import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
-import gr.eap.mymovies.util.MoviesHelper;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class ControllerMovie extends AppController {
 
     private final DBService dbService;
     private final TMBDService tmdbService;
-    private final MoviesHelper moviesHelper;
 
     public ControllerMovie() {
         super();
@@ -29,7 +27,6 @@ public class ControllerMovie extends AppController {
         // Initializing services
         tmdbService = new TMBDService();
         dbService = new DBService();
-        moviesHelper = new MoviesHelper();
     }
 
     public void retrieveAndPersistMovies() throws IOException, ParseException {

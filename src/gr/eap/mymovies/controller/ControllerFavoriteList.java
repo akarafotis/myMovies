@@ -5,9 +5,12 @@ import gr.eap.mymovies.model.Movie;
 import gr.eap.mymovies.model.FavoriteList;
 import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
-import gr.eap.mymovies.util.MoviesHelper;
+import gr.eap.mymovies.controller.ControllerMovie;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -17,7 +20,7 @@ public class ControllerFavoriteList extends AppController {
 
     private final DBService dbService;
     private final TMBDService tmdbService;
-    private final MoviesHelper moviesHelper;
+    private ControllerMovie controllerMovie;
 
     public ControllerFavoriteList() {
         super();
@@ -25,7 +28,7 @@ public class ControllerFavoriteList extends AppController {
         // Initializing services
         tmdbService = new TMBDService();
         dbService = new DBService();
-        moviesHelper = new MoviesHelper();
+        controllerMovie = new ControllerMovie();
     }
 
     public List<FavoriteList> selectFL(String name) {
@@ -41,6 +44,37 @@ public class ControllerFavoriteList extends AppController {
 
     public FavoriteList findFavoriteListById(int favoriteListId) {
         return em.find(FavoriteList.class, favoriteListId);
+    }
+
+    public static void persistFavoriteList(String fl_name) {
+
+        FavoriteList newFL = new FavoriteList();
+        em.getTransaction().begin();
+        newFL.setName(fl_name);
+        em.persist(newFL);
+        em.getTransaction().commit();
+    }
+
+    public void updateFavoriteList(FavoriteList list) {
+        em.getTransaction().begin();
+        em.persist(list);
+        em.getTransaction().commit();
+    }
+
+    public void deleteFavoriteList(FavoriteList list) {
+
+        em.getTransaction().begin();
+        List<Movie> movies = controllerMovie.selectMovieByFavoriteList(list);
+        movies.forEach(movie -> {
+            movie.setFavoriteListId(null);
+            em.persist(movie);
+        });
+        em.remove(list);
+        em.getTransaction().commit();
+    }
+
+    public void deleteFavoriteLists(List<FavoriteList> lists) {
+        lists.forEach(list -> deleteFavoriteList(list));
     }
 
     @Override
