@@ -1010,7 +1010,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
                     } else if (m.getFavoriteListId().getId() != fl.getId()) {
                         controllerMovie.updateMovie(m, fl);
-                        JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
+                        JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " μετακινήθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1039,9 +1039,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
 
         if ((int) (Math.log10(Integer.parseInt(yearTextField.getText())) + 1) != 4) {
-            JOptionPane.showMessageDialog(this, "Το πεδίο έτος αποτελείται από 4 ψηφία");
+            JOptionPane.showMessageDialog(this, "Το πεδίο έτος Κυκλοφορίας αποτελείται από 4 αριθμητικά ψηφία", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
         } else if (genreComboBox.getSelectedItem() == null || yearTextField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Πρέπει να συμπληρώσετε το έτος και το είδος");
+            JOptionPane.showMessageDialog(this, "Πρέπει να συμπληρώσετε το έτος και το είδος", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
         } else {
             favoriteMoviesTable.setVisible(true);
             System.out.println("ok");
@@ -1101,17 +1101,25 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_favoriteMoviesTableMouseClicked
 
     private void removeFromListButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeFromListButtonMouseClicked
-        List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
-        Movie m = selectedMovies.get(0);
-        System.out.println(selectedMovies.get(0).getTitle());
-        try {
-            favoriteListComboBox.setSelectedIndex(-1);
-            controllerMovie.updateMovie(m, null);
-        } catch (IOException ex) {
-            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (favoriteListComboBox.getSelectedIndex() != -1 && movieTitle != "") {
+            removeFromListButton.setEnabled(true);
+            List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
+            Movie m = selectedMovies.get(0);
+            System.out.println(selectedMovies.get(0).getTitle());
+            try {
+                favoriteListComboBox.setSelectedIndex(-1);
+                controllerMovie.updateMovie(m, null);
+                JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " αφαιρέθηκε από τις λίστες Αγαπημένων:\n ");
+            } catch (IOException ex) {
+                Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, " Πρέπει να επιλέξετε ταινία που να ανήκει σε λίστα Αγαπημένων", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_removeFromListButtonMouseClicked
 
     private void top10ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_top10ButtonActionPerformed
@@ -1185,7 +1193,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void updateButtonFLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateButtonFLMouseClicked
         List<String> fLnames = favoritListList.getSelectedValuesList();
         if (fLnames.size() != 1) {
-            JOptionPane.showMessageDialog(null, "Πρέπει να επιλέξετε μια λίστα για επεξεργασία!");
+            JOptionPane.showMessageDialog(this, "Πρέπει να επιλέξετε μια λίστα για επεξεργασία!", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Πρέπει να επιλέξετε μια λίστα για επεξεργασία!");
         } else {
             String newName = (String) JOptionPane.showInputDialog(null,
                     "Παρακαλώ αλλάξτε το όνομα της λίστας", "Επεξεργασία Λίστας", JOptionPane.WARNING_MESSAGE, null, null, fLnames.get(0));
@@ -1200,7 +1209,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void deleteButtonFLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonFLActionPerformed
         List<String> fLnames = favoritListList.getSelectedValuesList();
         if (fLnames.size() == 0) {
-            JOptionPane.showMessageDialog(null, "Πρέπει να επιλέξετε τουλάχιστον μία λίστα για διαγραφή!");
+            JOptionPane.showMessageDialog(this, "Πρέπει να επιλέξετε τουλάχιστον μια λίστα για διαγραφή!", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
         } else {
             String joined = String.join("\n", fLnames);
             Object[] options = {"Ναι", "Ακύρωση"};
