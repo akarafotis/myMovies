@@ -1,6 +1,5 @@
 package gr.eap.mymovies.view;
 
-import gr.eap.mymovies.controller.AppController;
 import gr.eap.mymovies.controller.ControllerMovie;
 import gr.eap.mymovies.controller.ControllerGenre;
 import gr.eap.mymovies.controller.ControllerFavoriteList;
@@ -17,49 +16,54 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author akarafotis
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 public class GUIMainMenu extends javax.swing.JFrame {
 
-    private AppController appController;
-    private ControllerMovie controllerMovie;
-    private ControllerGenre controllerGenre;
-    private ControllerFavoriteList controllerFavoriteList;
-    private String movieTitle = "";
+    private final ControllerMovie controllerMovie;
+    private final ControllerGenre controllerGenre;
+    private final ControllerFavoriteList controllerFavoriteList;
     private FavoriteList selectedFL;
     private List<FavoriteList> lists;
-    private JList testList;
-
-    boolean hasFavoriteList = false;
+    private String movieTitle = "";
 
     public GUIMainMenu() {
         initComponents();
-        // Κεντράρισμα του παραθύρου εφαρμογής στην οθόνη του υπολογιστή
+        // emfanish tou parthirou sto kentro tis othonis
         this.setLocationRelativeTo(null);
+        // arxika ta ComboBox den exoun timh
         genreComboBox.setSelectedIndex(-1);
         favoriteListComboBox.setSelectedIndex(-1);
+        // apokripsh olon ton kentrikwn panels
         LayeredPane.removeAll();
+        // prosthiki tou aboutPanel
+        LayeredPane.add(aboutPanel);
+        // apokripsh olon ton eswterikwn panels
         top10Panel.setVisible(false);
         topPerListPanel.setVisible(false);
         searchTablePanel.setVisible(false);
         favoriteListMoviesPanel.setVisible(false);
-
-        UIManager.put("OptionPane.cancelButtonText", "Ακύρωση");
-        UIManager.put("OptionPane.okButtonText", "OK");
-
-        // Init Application Controller
+        // arxikopoihsh Application Controller
         controllerMovie = new ControllerMovie();
         controllerGenre = new ControllerGenre();
         controllerFavoriteList = new ControllerFavoriteList();
+        // metonomasia Buttons Text
+        UIManager.put("OptionPane.cancelButtonText", "Ακύρωση");
+        UIManager.put("OptionPane.okButtonText", "OK");
+        // katallilo tooltip gia to yearLabel
+        yearLabel.setToolTipText("2000 έως το τρέχον έτος (ΥΥΥΥ)");
     }
 
     @SuppressWarnings("unchecked")
@@ -82,6 +86,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
         statistics = new javax.swing.JButton();
         exit = new javax.swing.JButton();
         LayeredPane = new javax.swing.JLayeredPane();
+        progressPanel = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         statsPanel = new javax.swing.JPanel();
         top10Button = new javax.swing.JButton();
         topPerListButton = new javax.swing.JButton();
@@ -91,6 +99,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         topPerListPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         topPerListTable = new javax.swing.JTable();
+        jLabel15 = new javax.swing.JLabel();
         favoriteListsPanel = new javax.swing.JPanel();
         favoriteListMoviesPanel = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -101,6 +110,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         updateButtonFL = new javax.swing.JButton();
         deleteButtonFL = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         searchPanel = new javax.swing.JPanel();
         searchTablePanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -115,6 +125,21 @@ public class GUIMainMenu extends javax.swing.JFrame {
         searchMoviesLabel = new javax.swing.JLabel();
         searchButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        aboutPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        abouttext = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         MoviesMenu = new javax.swing.JMenu();
         retrieveAndStoreMoviesSubMenu = new javax.swing.JMenuItem();
@@ -122,6 +147,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         moviesListsMenu = new javax.swing.JMenu();
         manageFavoriteListsSubMenu = new javax.swing.JMenuItem();
         statisticsMenu = new javax.swing.JMenu();
+        aboutMenu = new javax.swing.JMenu();
         exitMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -154,7 +180,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         searchMovies.setText("<html><center>Αναζήτηση<br/>Ταινιών</center></html>");
         searchMovies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                persistGenres(evt);
+                searchMovies(evt);
             }
         });
 
@@ -162,7 +188,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         statistics.setText("Στατιστικά");
         statistics.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteData(evt);
+                dispalyStats(evt);
             }
         });
 
@@ -206,6 +232,44 @@ public class GUIMainMenu extends javax.swing.JFrame {
         buttonsPanel.setBounds(0, 0, 1024, 99);
         buttonsPanel.getAccessibleContext().setAccessibleName("ButtonPanel");
 
+        progressPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/ajax-loader.gif"))); // NOI18N
+
+        jLabel6.setText("Η ανάκτηση των δεδομένων είναι σε εξέλιξη");
+
+        jLabel14.setText("Παρακαλώ περιμένετε");
+
+        javax.swing.GroupLayout progressPanelLayout = new javax.swing.GroupLayout(progressPanel);
+        progressPanel.setLayout(progressPanelLayout);
+        progressPanelLayout.setHorizontalGroup(
+            progressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, progressPanelLayout.createSequentialGroup()
+                .addGap(49, 401, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(385, 385, 385))
+            .addGroup(progressPanelLayout.createSequentialGroup()
+                .addGroup(progressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(progressPanelLayout.createSequentialGroup()
+                        .addGap(450, 450, 450)
+                        .addComponent(jLabel5))
+                    .addGroup(progressPanelLayout.createSequentialGroup()
+                        .addGap(461, 461, 461)
+                        .addComponent(jLabel14)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        progressPanelLayout.setVerticalGroup(
+            progressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(progressPanelLayout.createSequentialGroup()
+                .addGap(170, 170, 170)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel14)
+                .addContainerGap(298, Short.MAX_VALUE))
+        );
+
         statsPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
 
         top10Button.setText("Οι Καλύτερες 10 Ταινίες");
@@ -219,7 +283,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         });
 
-        topPerListButton.setText("Οι Καλύτερες  Ταινίες ανά Λίστα");
+        topPerListButton.setText("Οι Καλύτερες Ταινίες ανά Λίστα");
         topPerListButton.setMaximumSize(new java.awt.Dimension(217, 39));
         topPerListButton.setMinimumSize(new java.awt.Dimension(217, 39));
         topPerListButton.setPreferredSize(new java.awt.Dimension(217, 39));
@@ -229,6 +293,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         });
 
+        top10Table.setBackground(new java.awt.Color(240, 240, 240));
         top10Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -246,6 +311,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 "Όνομα ταινίας", "Βαθμολογία"
             }
         ));
+        top10Table.setEnabled(false);
         jScrollPane1.setViewportView(top10Table);
 
         javax.swing.GroupLayout top10PanelLayout = new javax.swing.GroupLayout(top10Panel);
@@ -265,6 +331,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
+        topPerListTable.setBackground(new java.awt.Color(240, 240, 240));
         topPerListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -275,6 +342,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 "Όνομα ταινίας", "Λίστα Αγαπημένων"
             }
         ));
+        topPerListTable.setEnabled(false);
         jScrollPane3.setViewportView(topPerListTable);
 
         javax.swing.GroupLayout topPerListPanelLayout = new javax.swing.GroupLayout(topPerListPanel);
@@ -290,9 +358,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
             topPerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPerListPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(202, Short.MAX_VALUE))
         );
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/top.png"))); // NOI18N
 
         javax.swing.GroupLayout statsPanelLayout = new javax.swing.GroupLayout(statsPanel);
         statsPanel.setLayout(statsPanelLayout);
@@ -307,6 +377,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
             .addGroup(statsPanelLayout.createSequentialGroup()
                 .addGap(159, 159, 159)
                 .addComponent(top10Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(topPerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(177, 177, 177))
@@ -314,19 +386,25 @@ public class GUIMainMenu extends javax.swing.JFrame {
         statsPanelLayout.setVerticalGroup(
             statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statsPanelLayout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(top10Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(topPerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(statsPanelLayout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(top10Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(topPerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(statsPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel15)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(top10Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(topPerListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         favoriteListsPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
 
+        favoriteListMoviesTable.setBackground(new java.awt.Color(240, 240, 240));
         favoriteListMoviesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -338,33 +416,36 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 "Τίτλος ταινίας", "Βαθμολογία", "Περιγραφή"
             }
         ));
+        favoriteListMoviesTable.setEnabled(false);
         jScrollPane5.setViewportView(favoriteListMoviesTable);
 
         javax.swing.GroupLayout favoriteListMoviesPanelLayout = new javax.swing.GroupLayout(favoriteListMoviesPanel);
         favoriteListMoviesPanel.setLayout(favoriteListMoviesPanelLayout);
         favoriteListMoviesPanelLayout.setHorizontalGroup(
             favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteListMoviesPanelLayout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         favoriteListMoviesPanelLayout.setVerticalGroup(
             favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         createButtonFL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/new.png"))); // NOI18N
-        createButtonFL.setText("    Δημιουργία");
+        createButtonFL.setText("Δημιουργία");
+        createButtonFL.setToolTipText("");
         createButtonFL.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 createButtonFLMouseClicked(evt);
             }
         });
 
+        favoritListList.setBackground(new java.awt.Color(240, 240, 240));
         favoritListList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 favoritListListValueChanged(evt);
@@ -373,7 +454,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         jScrollPane4.setViewportView(favoritListList);
 
         updateButtonFL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/edit.png"))); // NOI18N
-        updateButtonFL.setText("  Επεξεργασία");
+        updateButtonFL.setLabel("Επεξεργασία");
         updateButtonFL.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 updateButtonFLMouseClicked(evt);
@@ -381,7 +462,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
         });
 
         deleteButtonFL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/delete.png"))); // NOI18N
-        deleteButtonFL.setText("     Διαγραφή");
+        deleteButtonFL.setText("   Διαγραφή");
+        deleteButtonFL.setToolTipText("");
+        deleteButtonFL.setMaximumSize(new java.awt.Dimension(131, 39));
+        deleteButtonFL.setMinimumSize(new java.awt.Dimension(131, 39));
+        deleteButtonFL.setPreferredSize(new java.awt.Dimension(131, 39));
         deleteButtonFL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonFLActionPerformed(evt);
@@ -396,50 +481,55 @@ public class GUIMainMenu extends javax.swing.JFrame {
         favoriteListsPanelLayout.setHorizontalGroup(
             favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
                 .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(deleteButtonFL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(updateButtonFL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(createButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 41, Short.MAX_VALUE)
-                .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
+                        .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(favoriteListsPanelLayout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteListsPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(updateButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(deleteButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(createButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(favoriteListsPanelLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         favoriteListsPanelLayout.setVerticalGroup(
             favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListsPanelLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                        .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                                .addGap(78, 78, 78)
-                                .addComponent(createButtonFL)
-                                .addGap(31, 31, 31)
-                                .addComponent(updateButtonFL)
-                                .addGap(30, 30, 30)
-                                .addComponent(deleteButtonFL))
-                            .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(createButtonFL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(updateButtonFL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(deleteButtonFL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
-        searchPanel.setMinimumSize(new java.awt.Dimension(1035, 735));
+        deleteButtonFL.getAccessibleContext().setAccessibleName("Διαγραφή");
+
+        searchPanel.setMinimumSize(new java.awt.Dimension(1035, 620));
         searchPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
 
         favoriteMoviesTable.setAutoCreateRowSorter(true);
+        favoriteMoviesTable.setBackground(new java.awt.Color(240, 240, 240));
         favoriteMoviesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -474,14 +564,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, favoriteListQuery, eLProperty, favoriteListComboBox);
         bindingGroup.addBinding(jComboBoxBinding);
 
-        favoriteListComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                favoriteListComboBoxMouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                favoriteListComboBoxMousePressed(evt);
-            }
-        });
         favoriteListComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 favoriteListComboBoxActionPerformed(evt);
@@ -499,18 +581,19 @@ public class GUIMainMenu extends javax.swing.JFrame {
         searchTablePanel.setLayout(searchTablePanelLayout);
         searchTablePanelLayout.setHorizontalGroup(
             searchTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchTablePanelLayout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
             .addGroup(searchTablePanelLayout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(addtoListLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(favoriteListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(removeFromListButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(searchTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(searchTablePanelLayout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(addtoListLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(favoriteListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(72, 72, 72)
+                        .addComponent(removeFromListButton))
+                    .addGroup(searchTablePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         searchTablePanelLayout.setVerticalGroup(
             searchTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -525,11 +608,14 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 .addGap(29, 29, 29))
         );
 
+        genreComboBox.setBackground(new java.awt.Color(240, 240, 240));
         genreComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${resultList}");
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, genreQuery, eLProperty, genreComboBox);
         bindingGroup.addBinding(jComboBoxBinding);
+
+        yearTextField.setBackground(new java.awt.Color(240, 240, 240));
 
         selectGenreLabel.setText("Επιλέξτε είδος");
 
@@ -559,26 +645,30 @@ public class GUIMainMenu extends javax.swing.JFrame {
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(searchPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(searchPanelLayout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(selectGenreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(genreComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(yearTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(searchPanelLayout.createSequentialGroup()
-                                .addComponent(searchButton)
-                                .addGap(72, 72, 72)
-                                .addComponent(clearButton))))
-                    .addGroup(searchPanelLayout.createSequentialGroup()
                         .addGap(88, 88, 88)
-                        .addComponent(searchMoviesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(searchTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchMoviesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(searchPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(searchButton)
+                        .addGap(72, 72, 72)
+                        .addComponent(clearButton))
+                    .addGroup(searchPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(searchPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(searchPanelLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectGenreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(genreComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(yearTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(searchTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         searchPanelLayout.setVerticalGroup(
@@ -586,6 +676,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(searchMoviesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(genreComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -594,20 +686,130 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(yearTextField)
                     .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(46, 46, 46)
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchButton)
                     .addComponent(clearButton))
-                .addGap(535, 535, 535))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(471, 471, 471))
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(searchTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        aboutPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/movies.png"))); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("myMovies");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel7.setText("Product Owner:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Γεώργιος Μανής");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("Scrum Team:");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel9.setText("Ευθύμιος Γεωργάκης");
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setText("Κυριάκος Καγιαλόγλου");
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel12.setText("Αριστείδης Καραφώτης");
+
+        abouttext.setEditable(false);
+        abouttext.setBackground(new java.awt.Color(240, 240, 240));
+        abouttext.setColumns(20);
+        abouttext.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
+        abouttext.setRows(4);
+        abouttext.setText("H εφαρμογή \"myMovies\" υλοποιήθηκε στo πλαίσιo της 3ης γραπτής εργασίας της  Θ.Ε ΠΛΗ24 του ΕΑΠ για το έτος 2018-2019\n\n");
+        abouttext.setWrapStyleWord(true);
+        abouttext.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jScrollPane6.setViewportView(abouttext);
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/eap.png"))); // NOI18N
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setText("Άγγελος Λένας");
+
+        javax.swing.GroupLayout aboutPanelLayout = new javax.swing.GroupLayout(aboutPanel);
+        aboutPanel.setLayout(aboutPanelLayout);
+        aboutPanelLayout.setHorizontalGroup(
+            aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(61, 61, 61)
+                        .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13)))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(212, 212, 212))
+            .addGroup(aboutPanelLayout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
+        );
+        aboutPanelLayout.setVerticalGroup(
+            aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutPanelLayout.createSequentialGroup()
+                .addGap(117, 117, 117)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
+        );
+
+        LayeredPane.setLayer(progressPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         LayeredPane.setLayer(statsPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         LayeredPane.setLayer(favoriteListsPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         LayeredPane.setLayer(searchPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        LayeredPane.setLayer(aboutPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout LayeredPaneLayout = new javax.swing.GroupLayout(LayeredPane);
         LayeredPane.setLayout(LayeredPaneLayout);
@@ -624,6 +826,16 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 .addGroup(LayeredPaneLayout.createSequentialGroup()
                     .addComponent(statsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1031, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 4, Short.MAX_VALUE)))
+            .addGroup(LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(LayeredPaneLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(progressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(LayeredPaneLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(aboutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         LayeredPaneLayout.setVerticalGroup(
             LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -638,6 +850,16 @@ public class GUIMainMenu extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(statsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE))
+            .addGroup(LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(LayeredPaneLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(progressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(LayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(LayeredPaneLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(aboutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         getContentPane().add(LayeredPane);
@@ -687,6 +909,14 @@ public class GUIMainMenu extends javax.swing.JFrame {
         });
         MenuBar.add(statisticsMenu);
 
+        aboutMenu.setText("Σχετικά");
+        aboutMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aboutMenuMouseClicked(evt);
+            }
+        });
+        MenuBar.add(aboutMenu);
+
         exitMenu.setText("Έξοδος");
         exitMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -701,69 +931,87 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    // methodos gia anaktish kai apothikeush tainiwn
     private void retrieveAndStoreMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesActionPerformed
-        controllerMovie.clearTable();
-        controllerGenre.clearTable();
-        controllerFavoriteList.clearTable();
-        try {
-            controllerGenre.retrieveAndPersistGenres();
-            controllerMovie.retrieveAndPersistMovies();
-        } catch (IOException ex) {
-            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Κατι δεν πήγε καλά");
-        } catch (ParseException ex) {
-            Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Κατι δεν πήγε καλά");
+        Object[] options = {"Ναι", "Ακύρωση"};
+        int n = JOptionPane.showOptionDialog(null,
+                "Η ανάκτηση δεδομένων θα διαγράψει όλες τις ταινίες και τις λίστες σας. Είστε σίγουρος?" + "\n",
+                "Προειδοποίηση",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, //do not use a custom Icon
+                options, //the titles of buttons
+                options[0]); //default button title
+        if (n == JOptionPane.YES_OPTION) {
+            // efoson epibebaiwsei o xrhsths emfanizetai to katallhlo panel
+            LayeredPane.removeAll();
+            LayeredPane.add(progressPanel);
+            progressPanel.setVisible(true);
+            // ekteleite h anaktish mesw tou TaskInitialize
+            // wste na mhn "pagwsei" h efarmogi
+            new TaskInitialize().execute();
         }
     }//GEN-LAST:event_retrieveAndStoreMoviesActionPerformed
 
+    // methodos gia th diaxeirish twn listwn
     private void manageFavoriteListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsActionPerformed
-        switchPanels(favoriteListsPanel);
-        drawFL();
+        switchPanels(favoriteListsPanel); // emfanish tou katallilou panel
+        favoriteListMoviesPanel.setVisible(false); // apokripsh tou pinaka tainiwv tis FavoriteList
+        drawFL(); // epanafora tvn listvn se periptvsh poy exoyn allaksei
     }//GEN-LAST:event_manageFavoriteListsActionPerformed
 
+    // methodos gia thn eksodo apo thn efarmogh
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-        System.out.println("exiting myMovies application");
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
-    private void persistGenres(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_persistGenres
-        switchPanels(searchPanel);
-        fetchGenres();
+    // methodos gia thn anazitisi tainiwn
+    private void searchMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMovies
+        switchPanels(searchPanel); // emfanish tou katallilou panel
+        fetchGenres(); // epanafora tvn eidwn se periptvsh poy exoyn allaksei
+        // adeiazoyme tis times tou eidous,etous kai krivoume to panel
         genreComboBox.setSelectedIndex(-1);
-        favoriteMoviesTable.setVisible(false);
+        yearTextField.setText("");
         searchTablePanel.setVisible(false);
-    }//GEN-LAST:event_persistGenres
+    }//GEN-LAST:event_searchMovies
 
-    private void deleteData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteData
-        switchPanels(statsPanel);
+    // methodos gia thn emfanisi statistikwn
+    private void dispalyStats(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dispalyStats
+        switchPanels(statsPanel); // emfanish tou katallilou panel
+        // apokripsi twn eswterikwn panels
         top10Panel.setVisible(false);
         topPerListPanel.setVisible(false);
-    }//GEN-LAST:event_deleteData
+    }//GEN-LAST:event_dispalyStats
 
+    // methodos gia thn diaxeirisi twn listvn apo to menu
     private void manageFavoriteListsSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFavoriteListsSubMenuActionPerformed
-        manageFavoriteListsActionPerformed(evt);
+        manageFavoriteListsActionPerformed(evt); // klisi ths katallilis methodou
     }//GEN-LAST:event_manageFavoriteListsSubMenuActionPerformed
 
+    // methodos gia thn prosthiki mias tainias se mia favoriteList agapimenwn
+    // mesw tou favoriteListComboBox
     private void favoriteListComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_favoriteListComboBoxActionPerformed
-
-        if (hasFavoriteList && favoriteListComboBox.getSelectedItem() != null) {
+        // an exei epilegei timh apo to favoriteListComboBox
+        if (favoriteListComboBox.getSelectedItem() != null && movieTitle != "") {
+            // kratame thn epilegmenh timh se String
             String selectedFavoriteList = (String) favoriteListComboBox.getSelectedItem();
             if (selectedFavoriteList == null || movieTitle == "") {
                 JOptionPane.showMessageDialog(this, "Πρέπει να επιλέξετε μια ταινία και μια λιστα");
             } else {
+                // vriskoume tin FavoriteList vasei onomatos
                 List<FavoriteList> list = controllerFavoriteList.selectFL(selectedFavoriteList);
                 FavoriteList fl = list.get(0);
-                System.out.println(fl);
+                // vriskoume tin tainia vasei onomatos
                 List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
                 Movie m = selectedMovies.get(0);
-                System.out.println(selectedMovies.get(0).getTitle());
-
                 try {
-                    controllerMovie.updateMovie(m, fl);
-                    JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
-                    hasFavoriteList = false;
+                    if (m.getFavoriteListId() == null) {
+                        controllerMovie.updateMovie(m, fl);
+                        JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
+                    } else if (m.getFavoriteListId().getId() != fl.getId()) {
+                        controllerMovie.updateMovie(m, fl);
+                        JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {
@@ -808,9 +1056,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 favoriteMoviesTable.getColumnModel().getColumn(1).setMaxWidth(90);
                 favoriteMoviesTable.getColumnModel().getColumn(2).setMinWidth(200);
 
-//                for (Movie m : filteredMovies) {
-//                    System.out.println(m.getTitle());
-//                }
                 int colCount = favoriteMoviesTable.getColumnCount();
 
                 DefaultTableModel tModel = (DefaultTableModel) favoriteMoviesTable.getModel();
@@ -854,10 +1099,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_favoriteMoviesTableMouseClicked
-
-    private void favoriteListComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favoriteListComboBoxMouseClicked
-
-    }//GEN-LAST:event_favoriteListComboBoxMouseClicked
 
     private void removeFromListButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeFromListButtonMouseClicked
         List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
@@ -917,10 +1158,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_topPerListButtonActionPerformed
-
-    private void favoriteListComboBoxMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favoriteListComboBoxMousePressed
-        hasFavoriteList = true;
-    }//GEN-LAST:event_favoriteListComboBoxMousePressed
 
     private void createButtonFLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createButtonFLMouseClicked
         String newfavoriteList = JOptionPane.showInputDialog(null, "Παρακαλώ γράψτε το όνομα της νέας λίστας", "Εισαγωγή Νέας Λίστας", JOptionPane.INFORMATION_MESSAGE);
@@ -992,7 +1229,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_retrieveAndStoreMoviesSubMenuActionPerformed
 
     private void searchMoviesSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMoviesSubMenuActionPerformed
-        persistGenres(evt);
+        searchMovies(evt);
     }//GEN-LAST:event_searchMoviesSubMenuActionPerformed
 
     private void exitMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMenuMouseClicked
@@ -1080,6 +1317,39 @@ public class GUIMainMenu extends javax.swing.JFrame {
         LayeredPane.revalidate();
     }
 
+    class TaskInitialize extends SwingWorker<Void, Void> {
+
+        @Override
+        protected Void doInBackground() {
+            try {
+                controllerMovie.clearTable();
+                controllerGenre.clearTable();
+                controllerFavoriteList.clearTable();
+
+                controllerGenre.retrieveAndPersistGenres();
+                controllerMovie.retrieveAndPersistMovies();
+
+            } catch (IOException ex) {
+                Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Κάτι δεν πήγε καλά!");
+            } catch (ParseException ex) {
+                Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Κάτι δεν πήγε καλά!");
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            progressPanel.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Επιτυχής ανάκτηση δεδομένων!");
+            //progressDialog.setVisible(false);
+        }
+    }
+    private void aboutMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuMouseClicked
+        switchPanels(aboutPanel);
+    }//GEN-LAST:event_aboutMenuMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1106,6 +1376,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUIMainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1119,6 +1392,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private javax.swing.JLayeredPane LayeredPane;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MoviesMenu;
+    private javax.swing.JMenu aboutMenu;
+    private javax.swing.JPanel aboutPanel;
+    private javax.swing.JTextArea abouttext;
     private javax.swing.JLabel addtoListLabel;
     private javax.swing.JPanel buttonsPanel;
     private javax.swing.JButton clearButton;
@@ -1141,15 +1417,34 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> genreComboBox;
     private javax.persistence.Query genreQuery;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JButton manageFavoriteLists;
     private javax.swing.JMenuItem manageFavoriteListsSubMenu;
     private javax.swing.JMenu moviesListsMenu;
     private javax.persistence.EntityManager myMoviesPUEntityManager;
+    private javax.swing.JPanel progressPanel;
     private javax.swing.JButton removeFromListButton;
     private javax.swing.JButton retrieveAndStoreMovies;
     private javax.swing.JMenuItem retrieveAndStoreMoviesSubMenu;

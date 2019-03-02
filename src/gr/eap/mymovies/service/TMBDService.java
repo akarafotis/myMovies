@@ -61,7 +61,6 @@ public class TMBDService {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("myMoviesPU");
         EntityManager em = emf.createEntityManager();
-        JOptionPane.showMessageDialog(null, "Η ανάκτηση των δεδομένων ξεκίνησε");
         int x = 0;
         for (int i = 1; i < 40; i++) {
             URL url = new URL(MOVIES_URI + String.valueOf(i));
