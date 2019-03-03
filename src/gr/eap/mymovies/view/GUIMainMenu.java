@@ -10,11 +10,9 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -74,11 +72,6 @@ public class GUIMainMenu extends javax.swing.JFrame {
         myMoviesPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("myMoviesPU").createEntityManager();
         favoriteListQuery = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT f.name FROM FavoriteList f");
         genreQuery = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT g.name FROM Genre g");
-        favoriteListsQuery = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT f.name FROM FavoriteList f");
-        favoriteListQuery1 = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT f.name FROM FavoriteList f");
-        favoriteListList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : favoriteListQuery1.getResultList();
-        favoriteListQuery2 = java.beans.Beans.isDesignTime() ? null : myMoviesPUEntityManager.createQuery("SELECT f.name FROM FavoriteList f");
-        favoriteListList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : favoriteListQuery2.getResultList();
         buttonsPanel = new javax.swing.JPanel();
         retrieveAndStoreMovies = new javax.swing.JButton();
         manageFavoriteLists = new javax.swing.JButton();
@@ -104,6 +97,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
         favoriteListMoviesPanel = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         favoriteListMoviesTable = new javax.swing.JTable();
+        jLabel16 = new javax.swing.JLabel();
+        FlLabel = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
         createButtonFL = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         favoritListList = new javax.swing.JList<>();
@@ -319,9 +315,9 @@ public class GUIMainMenu extends javax.swing.JFrame {
         top10PanelLayout.setHorizontalGroup(
             top10PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, top10PanelLayout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         top10PanelLayout.setVerticalGroup(
             top10PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,8 +346,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
         topPerListPanelLayout.setHorizontalGroup(
             topPerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPerListPanelLayout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
         topPerListPanelLayout.setVerticalGroup(
@@ -369,17 +365,17 @@ public class GUIMainMenu extends javax.swing.JFrame {
         statsPanelLayout.setHorizontalGroup(
             statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statsPanelLayout.createSequentialGroup()
-                .addGap(54, 54, 54)
+                .addContainerGap()
                 .addComponent(top10Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(topPerListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
+                .addContainerGap())
             .addGroup(statsPanelLayout.createSequentialGroup()
                 .addGap(159, 159, 159)
                 .addComponent(top10Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(51, 51, 51)
                 .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(topPerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(177, 177, 177))
         );
@@ -404,6 +400,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
         favoriteListsPanel.setPreferredSize(new java.awt.Dimension(1035, 620));
 
+        favoriteListMoviesPanel.setName(""); // NOI18N
+
         favoriteListMoviesTable.setBackground(new java.awt.Color(240, 240, 240));
         favoriteListMoviesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -419,21 +417,42 @@ public class GUIMainMenu extends javax.swing.JFrame {
         favoriteListMoviesTable.setEnabled(false);
         jScrollPane5.setViewportView(favoriteListMoviesTable);
 
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel16.setText("Ταινίες που ανήκουν στην Λιστα Αγαπημένων ");
+
+        FlLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        FlLabel.setText("_");
+
         javax.swing.GroupLayout favoriteListMoviesPanelLayout = new javax.swing.GroupLayout(favoriteListMoviesPanel);
         favoriteListMoviesPanel.setLayout(favoriteListMoviesPanelLayout);
         favoriteListMoviesPanelLayout.setHorizontalGroup(
             favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGroup(favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(FlLabel))
+                    .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         favoriteListMoviesPanelLayout.setVerticalGroup(
             favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(favoriteListMoviesPanelLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteListMoviesPanelLayout.createSequentialGroup()
+                .addGroup(favoriteListMoviesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FlLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         createButtonFL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gr/eap/mymovies/view/new.png"))); // NOI18N
@@ -482,34 +501,32 @@ public class GUIMainMenu extends javax.swing.JFrame {
             favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListsPanelLayout.createSequentialGroup()
                 .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                        .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(favoriteListsPanelLayout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteListsPanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(updateButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(deleteButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(createButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(18, 18, 18)
-                        .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(favoriteListsPanelLayout.createSequentialGroup()
+                            .addGap(51, 51, 51)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favoriteListsPanelLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(updateButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(deleteButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(createButtonFL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(favoriteListsPanelLayout.createSequentialGroup()
                         .addGap(56, 56, 56)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel1)))
+                .addGap(28, 28, 28)
+                .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         favoriteListsPanelLayout.setVerticalGroup(
             favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favoriteListsPanelLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(favoriteListsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(favoriteListsPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,9 +535,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(updateButtonFL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(deleteButtonFL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(favoriteListMoviesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(153, Short.MAX_VALUE))
+                        .addComponent(deleteButtonFL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
 
         deleteButtonFL.getAccessibleContext().setAccessibleName("Διαγραφή");
@@ -988,8 +1004,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
         manageFavoriteListsActionPerformed(evt); // klisi ths katallilis methodou
     }//GEN-LAST:event_manageFavoriteListsSubMenuActionPerformed
 
-    // methodos gia thn prosthiki mias tainias se mia favoriteList agapimenwn
-    // mesw tou favoriteListComboBox
+    // methodos gia thn prosthiki mias tainias se mia favoriteList agapimenwn mesw tou favoriteListComboBox
     private void favoriteListComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_favoriteListComboBoxActionPerformed
         // an exei epilegei timh apo to favoriteListComboBox
         if (favoriteListComboBox.getSelectedItem() != null && movieTitle != "") {
@@ -1005,9 +1020,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
                 Movie m = selectedMovies.get(0);
                 try {
+                    // An h tainia den anhkei se FavoriteList
                     if (m.getFavoriteListId() == null) {
                         controllerMovie.updateMovie(m, fl);
                         JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " προστέθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
+                        // An h tainia anhkei idi se FavoriteList
                     } else if (m.getFavoriteListId().getId() != fl.getId()) {
                         controllerMovie.updateMovie(m, fl);
                         JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " μετακινήθηκε στη λίστα Αγαπημένων:\n " + fl.getName());
@@ -1021,13 +1038,16 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_favoriteListComboBoxActionPerformed
 
+    // methodos gia thn anazitisi tainiwn symfona me kritiria
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        movieTitle = "";
-        fetchFL();
-        favoriteListComboBox.setSelectedIndex(-1);
+        movieTitle = ""; // adeiazoume to onoma ths tainias
+        fetchFL(); // epanafora tvn FavoriteLists se periptvsh poy exoyn allaksei
+        favoriteListComboBox.setSelectedIndex(-1); // adeiazoume to favoriteListComboBox
+        // kratame se metavliti to onoma tou Genre
         String selectedGenre = (String) genreComboBox.getSelectedItem();
+        // kratame se metavliti to etos
         String year = yearTextField.getText();
-
+        // Elegxoume an exei symplhrothei arithmitiko etos
         try {
             int k = Integer.parseInt(yearTextField.getText());
 
@@ -1037,31 +1057,35 @@ public class GUIMainMenu extends javax.swing.JFrame {
             yearTextField.setText("");
             return;
         }
-
+        // Elegxoume an exei 4psifio arithmitiko etos
         if ((int) (Math.log10(Integer.parseInt(yearTextField.getText())) + 1) != 4) {
             JOptionPane.showMessageDialog(this, "Το πεδίο έτος Κυκλοφορίας αποτελείται από 4 αριθμητικά ψηφία", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
+            // Elegxoume an exoun syblirothei kai 2 apaitoumena pedia
         } else if (genreComboBox.getSelectedItem() == null || yearTextField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Πρέπει να συμπληρώσετε το έτος και το είδος", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
+            // an perasoun oloi oi elegxoi
         } else {
+            // emfanizoume ton pinaka me tis tainies ana FavoriteList
             favoriteMoviesTable.setVisible(true);
-            System.out.println("ok");
+            // apothikevoume sth filteredMovies tis tainies pou teriazoun sta kritiria
             List<Movie> filteredMovies = controllerMovie.searchMovies(selectedGenre, year);
+            // an h lista einai kenh emfanizoyme katallilo minima
             if (filteredMovies.size() == 0) {
                 searchTablePanel.setVisible(false);
                 JOptionPane.showMessageDialog(this, "Δεν βρέθηκε ταινία με αυτά τα κτιτήρια");
             } else {
+                // alliws proetoimazoume ton pinaka
                 searchTablePanel.setVisible(true);
                 favoriteMoviesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 favoriteMoviesTable.getColumnModel().getColumn(0).setMinWidth(150);
                 favoriteMoviesTable.getColumnModel().getColumn(1).setMaxWidth(90);
                 favoriteMoviesTable.getColumnModel().getColumn(2).setMinWidth(200);
-
                 int colCount = favoriteMoviesTable.getColumnCount();
-
+                // dimiourgoume to tModel
                 DefaultTableModel tModel = (DefaultTableModel) favoriteMoviesTable.getModel();
                 tModel.setRowCount(0);
                 Object[] ob = new Object[colCount];
-
+                // gia kathe tainia pou exei h lista filteredMovies gemizoume ton pinaka stis swstes stiles
                 for (Movie m : filteredMovies) {
                     for (int row = 0; row < filteredMovies.size(); row++) {
                         ob[0] = m.getTitle();
@@ -1075,65 +1099,78 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
+    // methodos gia ton kathrismo kritiriwn anazitisis
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         genreComboBox.setSelectedIndex(-1);
         yearTextField.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    // methodos gia tin emfanisi ths FavotiteList pou anikei h tainia sto favoriteListComboBox
     private void favoriteMoviesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favoriteMoviesTableMouseClicked
-        //Get the movie title with sorted table listener
+        //vriskoume to onoma tis tainias
         DefaultTableModel model = (DefaultTableModel) favoriteMoviesTable.getModel();
         int selectedRowIndex = favoriteMoviesTable.getSelectedRow();
         System.out.println(model.getValueAt(favoriteMoviesTable.getRowSorter().convertRowIndexToModel(selectedRowIndex), 0));
         movieTitle = (model.getValueAt(favoriteMoviesTable.getRowSorter().convertRowIndexToModel(selectedRowIndex), 0)).toString();
+        // vriskoume tin tainia sth bash
         List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
         Movie m = selectedMovies.get(0);
-
+        // an h tainia exei FavotiteList
         if (m.getFavoriteListId() != null) {
+            //vriskoume th FavotiteList ap;o th bash
             List<FavoriteList> favoriteLists = controllerFavoriteList.findAll();
             FavoriteList favoriteList = controllerFavoriteList.findFavoriteListById(m.getFavoriteListId().getId());
+            // xreiazomaste th thesi tis FavotiteList mesa sth lista
             int idx = favoriteLists.indexOf(favoriteList);
+            // kai auth th thesi thn anathetoume sto favoriteListComboBox
             favoriteListComboBox.setSelectedIndex(idx);
+            // an h tainia den exei FavotiteList emfanizoume thn default epilogh
         } else {
             favoriteListComboBox.setSelectedIndex(-1);
         }
 
     }//GEN-LAST:event_favoriteMoviesTableMouseClicked
 
+    // methodos gia tin afairesei ths tainias apo th FavotiteList
     private void removeFromListButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeFromListButtonMouseClicked
-
+        // an exei epilegei tainia kai FavotiteList
         if (favoriteListComboBox.getSelectedIndex() != -1 && movieTitle != "") {
-            removeFromListButton.setEnabled(true);
+            // vriskoume thn tainia
             List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
             Movie m = selectedMovies.get(0);
-            System.out.println(selectedMovies.get(0).getTitle());
             try {
+                // katharizoume to favoriteListComboBox
                 favoriteListComboBox.setSelectedIndex(-1);
+                // enhmeronoume th bash me thn allagi
                 controllerMovie.updateMovie(m, null);
+                // katallilo minima epityxias
                 JOptionPane.showMessageDialog(this, "Η ταινία " + m.getTitle() + " αφαιρέθηκε από τις λίστες Αγαπημένων:\n ");
             } catch (IOException ex) {
                 Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
+            // alliws katallilo proeidopoihtiko minima
         } else {
             JOptionPane.showMessageDialog(this, " Πρέπει να επιλέξετε ταινία που να ανήκει σε λίστα Αγαπημένων", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
         }
 
     }//GEN-LAST:event_removeFromListButtonMouseClicked
 
+    // methodos gia emfansh twn top 10 tainiwn
     private void top10ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_top10ButtonActionPerformed
-        top10Panel.setVisible(true);
+        top10Panel.setVisible(true); // emfanisi tou katallilou panel
+        // klisi tou controllerMovie gia euresi twn top10 apo tin vash
         List<Movie> top10Movies = controllerMovie.findTop10Movies();
+        // kathorismos tou mikous twn stilwn tou pinaka
         top10Table.getColumnModel().getColumn(0).setMinWidth(150);
         top10Table.getColumnModel().getColumn(1).setMaxWidth(90);
-
         int colCount = top10Table.getColumnCount();
-
+        // dimiourgoume to tModel
         DefaultTableModel tModel = (DefaultTableModel) top10Table.getModel();
         tModel.setRowCount(0);
         Object[] ob = new Object[colCount];
-
+        // gia kathe tainia gemizoume ton pinaka stis swstes stiles
         for (Movie m : top10Movies) {
             for (int row = 0; row < top10Movies.size(); row++) {
                 ob[0] = m.getTitle();
@@ -1145,19 +1182,27 @@ public class GUIMainMenu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_top10ButtonActionPerformed
 
+    // methodos gia emfansh twn top tainiwn ana lista
     private void topPerListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topPerListButtonActionPerformed
         int colCount = topPerListTable.getColumnCount();
+        // dimiourgoume to tModel
         DefaultTableModel tModel = (DefaultTableModel) topPerListTable.getModel();
         tModel.setRowCount(0);
         Object[] ob = new Object[colCount];
+        // klisi tou controllerFavoriteList gia euresi twn favoriteLists apo tin vash
         List<FavoriteList> favoriteList = controllerFavoriteList.findAll();
-
+        // an den yparxoun katallilo minima
         if (favoriteList.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Δεν έχετε δημιουργήσει Λίστες αγαπημένων ταινιών");
         } else {
+            // alliws emfanisi tou sxetikou panel
             topPerListPanel.setVisible(true);
+            // gia kathe FavoriteList klisi tou controllerMovie gia euresi twn tainivn pou anikoun
+            // stin FavoriteList
             for (FavoriteList fl : favoriteList) {
                 List<Movie> moviesByFL = controllerMovie.selectMovieByFavoriteList(fl);
+                // logo tou sxediasmou tou query epeilegoume to 1o stoixeio tis listas
+                // to opoio einai kai to top rated autis
                 if (moviesByFL.size() != 0) {
                     ob[0] = moviesByFL.get(0).getTitle();
                     ob[1] = fl.getName();
@@ -1167,46 +1212,60 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_topPerListButtonActionPerformed
 
+    // methodos gia th dimiourgia favoriteList
     private void createButtonFLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createButtonFLMouseClicked
         String newfavoriteList = JOptionPane.showInputDialog(null, "Παρακαλώ γράψτε το όνομα της νέας λίστας", "Εισαγωγή Νέας Λίστας", JOptionPane.INFORMATION_MESSAGE);
         System.out.println(newfavoriteList);
         if (newfavoriteList != null) {
+            // klisi tou controllerFavoriteList gia apothikeusi tis neas favoriteList
             controllerFavoriteList.persistFavoriteList(newfavoriteList);
+            // klisi tis drawFL gia na apotipothei i allagh sth lista twn FavoriteLists
             drawFL();
         }
     }//GEN-LAST:event_createButtonFLMouseClicked
 
+    // methodos gia thn enimerwsi tou pinaka tainiwn kathe  favoriteList
     private void favoritListListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_favoritListListValueChanged
         String selectedList = "";
-        if (!evt.getValueIsAdjusting()) {//This line prevents double events
-            System.out.println(favoritListList.getSelectedValue());
+        if (!evt.getValueIsAdjusting()) {//etsi apofeugoume dipli epilogh listas
             selectedList = favoritListList.getSelectedValue();
         }
+        // klisi tou controllerFavoriteList gia euresi tis favoriteList
         List<FavoriteList> favoriteList = controllerFavoriteList.selectFL(selectedList);
         if (favoriteList.size() != 0) {
+            // klisi tis drawMoviesPerFavoriteList me orisma tin epilegmeni favoriteList
+            FlLabel.setText("'" + selectedList + "'");
             favoriteListMoviesPanel.setVisible(true);
             selectedFL = favoriteList.get(0);
             drawMoviesPerFavoriteList(selectedFL);
     }//GEN-LAST:event_favoritListListValueChanged
     }
 
+    // methodos gia thn enimerwsi tou onomatos ths favoriteList
     private void updateButtonFLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateButtonFLMouseClicked
+        // kratame to onona tis epilegmenis favoriteList
         List<String> fLnames = favoritListList.getSelectedValuesList();
+        // H methodos prepei na doulevei mono gia mia favoriteList
         if (fLnames.size() != 1) {
             JOptionPane.showMessageDialog(this, "Πρέπει να επιλέξετε μια λίστα για επεξεργασία!", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
-            //JOptionPane.showMessageDialog(null, "Πρέπει να επιλέξετε μια λίστα για επεξεργασία!");
         } else {
+            // sti metavliti newName kratame tin eisagwgi tou xristi
             String newName = (String) JOptionPane.showInputDialog(null,
                     "Παρακαλώ αλλάξτε το όνομα της λίστας", "Επεξεργασία Λίστας", JOptionPane.WARNING_MESSAGE, null, null, fLnames.get(0));
             if (newName != null) {
+                //enimeronoume to onoma tis favoriteList toso sto pinaka oso kai sti lista
+                FlLabel.setText("'" + newName + "'");
                 selectedFL.setName(newName);
+                //klisi ston controllerFavoriteList gia update tis favoriteList sti basi
                 controllerFavoriteList.updateFavoriteList(selectedFL);
                 drawFL();
             }
         }
     }//GEN-LAST:event_updateButtonFLMouseClicked
 
+    // methodos gia thn diagrafi mias favoriteList
     private void deleteButtonFLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonFLActionPerformed
+        // omoiws me prin me ti diafora oti edw dexomaste kai parapanw favoriteLists
         List<String> fLnames = favoritListList.getSelectedValuesList();
         if (fLnames.size() == 0) {
             JOptionPane.showMessageDialog(this, "Πρέπει να επιλέξετε τουλάχιστον μια λίστα για διαγραφή!", "Προειδοποίηση", JOptionPane.WARNING_MESSAGE);
@@ -1223,9 +1282,14 @@ public class GUIMainMenu extends javax.swing.JFrame {
                     options, //the titles of buttons
                     options[0]); //default button title
             if (n == JOptionPane.YES_OPTION) {
+                favoriteListMoviesPanel.setVisible(false);
+                // gia kathe lista pros diagrafi
                 for (String name : fLnames) {
+                    //klisi ston controllerFavoriteList gia select tis favoriteList sti basi
                     FavoriteList fl = controllerFavoriteList.selectFL(name).get(0);
+                    //klisi ston controllerFavoriteList gia delete tis favoriteList sti basi
                     controllerFavoriteList.deleteFavoriteList(fl);
+                    //klisi tis drawMoviesPerFavoriteList me orisma tin FavoriteList
                     drawMoviesPerFavoriteList(selectedFL);
                 }
                 drawFL();
@@ -1233,36 +1297,45 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteButtonFLActionPerformed
 
+    // methodos gia anaktish kai apothikeush tainiwn apo to menu
     private void retrieveAndStoreMoviesSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveAndStoreMoviesSubMenuActionPerformed
         retrieveAndStoreMoviesActionPerformed(evt);
     }//GEN-LAST:event_retrieveAndStoreMoviesSubMenuActionPerformed
 
+    // methodos gia thn anazitisi tainiwn apo to menu
     private void searchMoviesSubMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMoviesSubMenuActionPerformed
         searchMovies(evt);
     }//GEN-LAST:event_searchMoviesSubMenuActionPerformed
 
+    // methodos gia thn eksodo apo tin efarmogi apo to menu
     private void exitMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMenuMouseClicked
         System.exit(0);
     }//GEN-LAST:event_exitMenuMouseClicked
 
+    // methodos gia thn emfanisi twn statistikwn
     private void statisticsMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statisticsMenuMouseClicked
         switchPanels(statsPanel);
         top10Panel.setVisible(false);
         topPerListPanel.setVisible(false);
     }//GEN-LAST:event_statisticsMenuMouseClicked
 
+    // methodos gia thn emfanisi tis about page
+    private void aboutMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuMouseClicked
+        switchPanels(aboutPanel);
+    }//GEN-LAST:event_aboutMenuMouseClicked
+
+    // methodos gia tin enimerwsi tis listas FavoriteList
     private void drawFL() {
         List<FavoriteList> favoriteLists = controllerFavoriteList.findAll();
         String[] FLarray = new String[favoriteLists.size()];
         for (int i = 0; i < favoriteLists.size(); i++) {
             FLarray[i] = favoriteLists.get(i).getName();
-            System.out.println(FLarray[i]);
-
         }
         favoritListList.setListData(FLarray);
         favoritListList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
 
+    // methodos gia tin enimerwsi tou pinaka me tis tainies twn FavoriteList
     private void drawMoviesPerFavoriteList(FavoriteList favoriteList) {
         List<Movie> moviesByFL = controllerMovie.selectMovieByFavoriteList(favoriteList);
 
@@ -1290,17 +1363,18 @@ public class GUIMainMenu extends javax.swing.JFrame {
         }
     }
 
+    // methodos gia tin euresi tis listas FavoriteList kai enimerwsis tou favoriteListComboBox
     private void fetchFL() {
         List<FavoriteList> favoriteLists = controllerFavoriteList.findAll();
         String[] FLarray = new String[favoriteLists.size()];
         for (int i = 0; i < favoriteLists.size(); i++) {
             FLarray[i] = favoriteLists.get(i).getName();
-            System.out.println(FLarray[i]);
         }
         DefaultComboBoxModel model = new DefaultComboBoxModel(FLarray);
         favoriteListComboBox.setModel(model);
     }
 
+    // methodos gia tin euresi tis listas Genres kai enimerwsis tou genreComboBox
     private void fetchGenres() {
         List<Genre> genres = controllerGenre.findAll();
         String[] genreArray = new String[genres.size()];
@@ -1312,13 +1386,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
         genreComboBox.setModel(model);
     }
 
-    private List<FavoriteList> getSelectedLists() {
-        System.out.println(favoritListList.getSelectedIndices());
-        return Arrays.stream(favoritListList.getSelectedIndices()).boxed()
-                .map(idx -> lists.get(idx))
-                .collect(Collectors.toList());
-    }
-
+    // methodos gia tin enallagi twn panels mesa sto LayeredPane
+    // kathe fora mporei na emfanizetai mono ena panel
     private void switchPanels(JPanel panel) {
         LayeredPane.removeAll();
         LayeredPane.add(panel);
@@ -1326,6 +1395,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
         LayeredPane.revalidate();
     }
 
+    // methodos gia tin diagrafi dedomenwn apo tin vasi kai anakrisis newn
+    // ginetai xrisi tou SwingWorker gia na mporesei h methodos na trexei
+    // parallila se allo thread kai na min pagwnei h efermogi tin wra tis
+    // anaktisis twn tainiwn apo to TMDB api
     class TaskInitialize extends SwingWorker<Void, Void> {
 
         @Override
@@ -1334,10 +1407,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
                 controllerMovie.clearTable();
                 controllerGenre.clearTable();
                 controllerFavoriteList.clearTable();
-
                 controllerGenre.retrieveAndPersistGenres();
                 controllerMovie.retrieveAndPersistMovies();
-
             } catch (IOException ex) {
                 Logger.getLogger(GUIMainMenu.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Κάτι δεν πήγε καλά!");
@@ -1352,12 +1423,8 @@ public class GUIMainMenu extends javax.swing.JFrame {
         protected void done() {
             progressPanel.setVisible(false);
             JOptionPane.showMessageDialog(null, "Επιτυχής ανάκτηση δεδομένων!");
-            //progressDialog.setVisible(false);
         }
     }
-    private void aboutMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuMouseClicked
-        switchPanels(aboutPanel);
-    }//GEN-LAST:event_aboutMenuMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1398,6 +1465,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel FlLabel;
     private javax.swing.JLayeredPane LayeredPane;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MoviesMenu;
@@ -1413,15 +1481,10 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private javax.swing.JMenu exitMenu;
     private javax.swing.JList<String> favoritListList;
     private javax.swing.JComboBox<String> favoriteListComboBox;
-    private java.util.List<gr.eap.mymovies.model.FavoriteList> favoriteListList;
-    private java.util.List<gr.eap.mymovies.model.FavoriteList> favoriteListList1;
     private javax.swing.JPanel favoriteListMoviesPanel;
     private javax.swing.JTable favoriteListMoviesTable;
     private javax.persistence.Query favoriteListQuery;
-    private javax.persistence.Query favoriteListQuery1;
-    private javax.persistence.Query favoriteListQuery2;
     private javax.swing.JPanel favoriteListsPanel;
-    private javax.persistence.Query favoriteListsQuery;
     private javax.swing.JTable favoriteMoviesTable;
     private javax.swing.JComboBox<String> genreComboBox;
     private javax.persistence.Query genreQuery;
@@ -1432,6 +1495,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1449,6 +1513,7 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JButton manageFavoriteLists;
     private javax.swing.JMenuItem manageFavoriteListsSubMenu;
     private javax.swing.JMenu moviesListsMenu;

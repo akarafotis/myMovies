@@ -4,15 +4,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
-import gr.eap.mymovies.model.Genre;
-import gr.eap.mymovies.model.Movie;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.*;
 
-/**
- *
- * @author akarafotis
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 public class DBService {
 
@@ -20,17 +18,16 @@ public class DBService {
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
-    //Μηνύματα
+    // minima apotixias syndesis sti bash
     private static final String errDBConn = "Αποτυχία σύνδεσης με τη Βάση Δεδομένων!";
 
     public static void connect() {
         if (emf == null) {
             try {
-                //δημιουργία Entity Manager που θα χρησιμοποιηθεί καθ όλη τη διάρκεια εκτέλεσης της εφαρμογής.
+                //dimiourgia tou Entity Manager
                 emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
                 em = emf.createEntityManager();
             } catch (Exception e) {
-                System.out.println(e);
                 JOptionPane.showMessageDialog(null, errDBConn, "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -39,13 +36,4 @@ public class DBService {
     public static EntityManager getEm() {
         return em;
     }
-
-    public void persistGenres(List<Genre> genres) {
-
-    }
-
-    public void persistMovies(Map<Genre, List<Movie>> movies) {
-
-    }
-
 }
