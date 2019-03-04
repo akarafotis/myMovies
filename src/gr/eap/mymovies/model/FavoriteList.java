@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gr.eap.mymovies.model;
 
 import java.beans.PropertyChangeListener;
@@ -23,9 +18,12 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author akarafotis
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 @Entity
 @Table(name = "FAVORITE_LIST")
@@ -34,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FavoriteList.findAll", query = "SELECT f FROM FavoriteList f")
     , @NamedQuery(name = "FavoriteList.findById", query = "SELECT f FROM FavoriteList f WHERE f.id = :id")
     , @NamedQuery(name = "FavoriteList.findByName", query = "SELECT f FROM FavoriteList f WHERE f.name = :name")
-    // added deleteAll namedQuery
+    // namedQuery gia diagrafi olwn twn FavoriteLists
     , @NamedQuery(name = "FavoriteList.deleteAll", query = "DELETE FROM FavoriteList")})
 public class FavoriteList implements Serializable {
 

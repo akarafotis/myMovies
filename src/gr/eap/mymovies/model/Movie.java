@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gr.eap.mymovies.model;
 
 import java.beans.PropertyChangeListener;
@@ -23,9 +18,12 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author g_kak
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 @Entity
 @Table(name = "MOVIE")
@@ -37,11 +35,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Movie.findByReleaseDate", query = "SELECT m FROM Movie m WHERE m.releaseDate = :releaseDate")
     , @NamedQuery(name = "Movie.findByRating", query = "SELECT m FROM Movie m WHERE m.rating = :rating")
     , @NamedQuery(name = "Movie.findByOverview", query = "SELECT m FROM Movie m WHERE m.overview = :overview")
-    // added namedQueries
+    // namedQuery gia diagrafi olwn twn Movies
     , @NamedQuery(name = "Movie.deleteAll", query = "DELETE FROM Movie")
-    , @NamedQuery(name = "Movie.findByYear", query = "SELECT m FROM Movie m JOIN m.genreId g "
+    // namedQuery gia euresi tainiwn vasei Genre & Year
+    // kanoume Join me ton pinaka Genre mesw tou m.genreId kai thetoume
+    // ws parametrous to Genre & Year
+    , @NamedQuery(name = "Movie.findByYearAndGenre", query = "SELECT m FROM Movie m JOIN m.genreId g "
             + "WHERE g.name = :genre and FUNC ('YEAR', m.releaseDate) = :releaseDate")
+    // namedQuery gia taksinomisi twn tainiwn vasei tis vatmologias tous
     , @NamedQuery(name = "Movie.findTop10", query = "SELECT m FROM Movie m ORDER BY m.rating DESC")
+    // namedQuery gia euresi twn tainiwn vasei tis FavoriteList tous
     , @NamedQuery(name = "Movie.findByFavoriteList", query = "SELECT m FROM Movie m WHERE m.favoriteListId = :favoriteListId ORDER BY m.rating DESC")
 })
 

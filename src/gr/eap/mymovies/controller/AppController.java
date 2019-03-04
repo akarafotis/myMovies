@@ -1,29 +1,33 @@
 package gr.eap.mymovies.controller;
 
-/*γενική κλάση διαχείρησης των entities*/
+/*geniki klasi diaxeirisis twn entities*/
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import gr.eap.mymovies.service.DBService;
 
-/**
- *
- * @author akarafotis
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
+// abstract klasi pou klironomoun oloi oi controllers
 public abstract class AppController {
 
-    //χρησιμοποιούμε static για να έχουμε τον ίδιο entity manager καθ' όλη τη διάρκεια της εκτέλεσης
+    //static gia na exoume ton idio entity manager se oli tin efarmogi
     protected static EntityManager em;
 
     public AppController() {
         if (em == null) {
-            /*Σύνδεση με τη βάση, δημιουργία entity factory και entity manager*/
+            /*syndesi me ti vasi, create entity factory kai entity manager*/
             DBService.connect();
             em = DBService.getEm();
         }
     }
 
-    //μέθοδος διαγραφής πίνακα μέσω ενός έτοιμου namedQuery.
+    //methodos gia diagrafi pinaka mesw namedQuery.
     protected void clearTbl(String namedQuery) {
         try {
             em.getTransaction().begin();

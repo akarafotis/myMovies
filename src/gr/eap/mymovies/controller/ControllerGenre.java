@@ -1,38 +1,31 @@
 package gr.eap.mymovies.controller;
 
-import gr.eap.mymovies.service.DBService;
 import gr.eap.mymovies.service.TMBDService;
 import gr.eap.mymovies.model.Genre;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Query;
 
-/**
- *
- * @author akarafotis
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 public class ControllerGenre extends AppController {
 
-    private final DBService dbService;
     private final TMBDService tmdbService;
 
     public ControllerGenre() {
         super();
 
-        // Initializing services
+        // Initializing service
         tmdbService = new TMBDService();
-        dbService = new DBService();
     }
 
-    @Override
-    public void clearTable() {
-        clearTbl("Genre.deleteAll");
-    }
-
-    // Εισαγωγή δεδομένων από JSON στον πίνακα Genres
+    // methodos gia eisagwgi dedomenvn ston pinaka Genres
     public void retrieveAndPersistGenres() throws IOException {
-
         em.getTransaction().begin();
         List<Genre> genres = tmdbService.getGenres();
         for (Genre genre : genres) {
@@ -42,9 +35,16 @@ public class ControllerGenre extends AppController {
         em.getTransaction().commit();
     }
 
+    // methodos pou epistrefei ola ta Genres
+    // me xrisi NamedQuery tis Genre class
     public List<Genre> findAll() {
         Query q = em.createNamedQuery("Genre.findAll");
         return q.getResultList();
     }
 
+    // diagrafh twn eggrafwn apo to table Genre tis vasis
+    @Override
+    public void clearTable() {
+        clearTbl("Genre.deleteAll");
+    }
 }

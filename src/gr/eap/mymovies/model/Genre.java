@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gr.eap.mymovies.model;
 
 import java.beans.PropertyChangeListener;
@@ -21,9 +16,12 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author g_kak
+/*
+ * @authors:
+ * eGiorgakis
+ * kKagialoglou
+ * aKarafotis
+ * aLenas
  */
 @Entity
 @Table(name = "GENRE")
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Genre.findAll", query = "SELECT g FROM Genre g")
     , @NamedQuery(name = "Genre.findById", query = "SELECT g FROM Genre g WHERE g.id = :id")
     , @NamedQuery(name = "Genre.findByName", query = "SELECT g FROM Genre g WHERE g.name = :name")
-    // added deleteAll namedQuery
+    // namedQuery gia diagrafi olwn twn Genres
     , @NamedQuery(name = "Genre.deleteAll", query = "DELETE FROM Genre")})
 public class Genre implements Serializable {
 
