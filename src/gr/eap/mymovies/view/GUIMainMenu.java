@@ -1,5 +1,6 @@
 package gr.eap.mymovies.view;
 
+import com.sun.glass.events.KeyEvent;
 import gr.eap.mymovies.controller.ControllerMovie;
 import gr.eap.mymovies.controller.ControllerGenre;
 import gr.eap.mymovies.controller.ControllerFavoriteList;
@@ -569,6 +570,11 @@ public class GUIMainMenu extends javax.swing.JFrame {
         favoriteMoviesTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 favoriteMoviesTableMouseClicked(evt);
+            }
+        });
+        favoriteMoviesTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                favoriteMoviesTableKeyPressed(evt);
             }
         });
         jScrollPane2.setViewportView(favoriteMoviesTable);
@@ -1323,6 +1329,41 @@ public class GUIMainMenu extends javax.swing.JFrame {
     private void aboutMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuMouseClicked
         switchPanels(aboutPanel);
     }//GEN-LAST:event_aboutMenuMouseClicked
+
+    // methodos gia tin emfanisi ths FavotiteList pou anikei h tainia sto favoriteListComboBox
+    // se periptosi pou h tainia epilegei me KeyEvent kai oxi me mouseEvent
+    private void favoriteMoviesTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_favoriteMoviesTableKeyPressed
+        // mono se periptosi pou patithoun ta pliktra panw kai katw
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN || evt.getKeyCode() == KeyEvent.VK_UP) {
+            DefaultTableModel model = (DefaultTableModel) favoriteMoviesTable.getModel();
+            int selectedRowIndex = 0;
+            // epilegoume to swsto row kanontas elegxo kai gia oriakes periptwseis
+            if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+                selectedRowIndex = favoriteMoviesTable.getSelectedRow() == model.getRowCount() - 1 ? model.getRowCount() - 1
+                        : favoriteMoviesTable.getSelectedRow() + 1;
+            } else if (evt.getKeyCode() == KeyEvent.VK_UP) {
+                selectedRowIndex = favoriteMoviesTable.getSelectedRow() == 0 ? 0 : favoriteMoviesTable.getSelectedRow() - 1;
+            }
+            //vriskoume to onoma tis tainias
+            movieTitle = (model.getValueAt(favoriteMoviesTable.getRowSorter().convertRowIndexToModel(selectedRowIndex), 0)).toString();
+            // vriskoume tin tainia sth bash
+            List<Movie> selectedMovies = controllerMovie.selectMovie(movieTitle);
+            Movie m = selectedMovies.get(0);
+            // an h tainia exei FavotiteList
+            if (m.getFavoriteListId() != null) {
+                //vriskoume th FavotiteList ap;o th bash
+                List<FavoriteList> favoriteLists = controllerFavoriteList.findAll();
+                FavoriteList favoriteList = controllerFavoriteList.findFavoriteListById(m.getFavoriteListId().getId());
+                // xreiazomaste th thesi tis FavotiteList mesa sth lista
+                int idx = favoriteLists.indexOf(favoriteList);
+                // kai auth th thesi thn anathetoume sto favoriteListComboBox
+                favoriteListComboBox.setSelectedIndex(idx);
+                // an h tainia den exei FavotiteList emfanizoume thn default epilogh
+            } else {
+                favoriteListComboBox.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_favoriteMoviesTableKeyPressed
 
     // methodos gia tin enimerwsi tis listas FavoriteList
     private void drawFL() {
